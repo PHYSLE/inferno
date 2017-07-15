@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<!-- *************************
+
+Copyright © 2007 - 2017 PHYSLE
+All rights reserved.
+
+************************* -->
+
+	<title>Inferno</title>
+	<link rel="stylesheet" type="text/css" href="inferno.css">
+	<script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
+	<script src="https://code.createjs.com/preloadjs-0.6.2.min.js"></script>
+	<script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+	<script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script>
+	<script src="inferno.game.js"></script>
+	<script src="inferno.factory.js"></script>
+</head>
+<body onload="Game.Init();">
+<div id="header"><a href="http://physle.com/"><img src="http://physle.com/images/logo-100.png" alt="Physle Logo" /></a></div>
+<div id="content">
+	<canvas id="canvas"></canvas>
+	<div id="debug"></div>
+	<div id="score"><small></small></div>
+	<div id="level"></div>
+	<div id="hint"></div>
+	<div id="menu">
+		<img src="images/title.png">
+		<div id="menu-main">
+			<a class="button inactive" id="menu-continue">CONTINUE</a>
+			<a class="button" href="javascript:void(0);" onclick="Game.Start(); $('#menu').hide()">NEW GAME</a>
+			<a class="button" href="javascript:void(0);" onclick="$('#menu-main').hide(); $('#menu-options').show();">OPTIONS</a>
+		</div>
+		<div id="menu-options">
+			<a class="button" href="javascript:void(0);" onclick="$('#menu-main').show(); $('#menu-options').hide();">MAIN MENU</a>
+			<div class="option">
+				<input type="checkbox" id="opt-sound" onchange="Game.UpdateSetting('sound', this.checked)" checked>
+				<label for="opt-sound">SOUND</label>
+			</div>
+			<div class="option">
+				<input type="checkbox" id="opt-music" onchange="Game.UpdateSetting('music', this.checked)" checked>
+				<label for="opt-music">MUSIC</label>
+			</div>
+			<div class="option">
+				<input type="checkbox" id="opt-effects" onchange="Game.UpdateSetting('efx', this.checked)" checked>
+				<label for="opt-effects">EFFECTS</label>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
