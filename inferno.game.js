@@ -1,6 +1,6 @@
 /* ---------------------------
 
-Copyright © 2007 - 2017 PHYSLE
+Copyright Â© 2007 - 2017 PHYSLE
 All rights reserved.
 
 --------------------------- */
@@ -35,9 +35,8 @@ var Game = {
 	Ycamoffset:420,
 	Yterminate:800, // point where player dies, LoadLevel will figure this out dynamically
 	Level:null,
-	LevelMaps:["100.js","200.js","300.js","400.js","500.js","600.js","700.js",
-			"800.js","900.js","1000.js","portals.js","secret.js"],
-	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","spring","turbo"],
+	LevelMaps:["100","200","300","400","500","600","700","800","900","1000","portals","secret"],
+	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","music-6","spring","turbo"],
 	Images:["balloon","blocks","bonus","branch","coin","exit","fist","head","key","ladder",
 				"lava","particle","player_r","player_l","portal","spring","temple","turbo"],
 	Debug:false,
@@ -49,6 +48,7 @@ var Game = {
 	Bonus:null,
 	LoadedBonus:false,
 	Temple:null,
+	Music:null,
 	CookieName:"PslInf",
 	JustRestored:false,
 	Unlock:0,
@@ -60,19 +60,20 @@ var Game = {
 	},
 	
 	Init: function() {
-		var queue = new createjs.LoadQueue(true);
-		queue.installPlugin(createjs.Sound);
-		queue.on("complete", Game.LoadedQueue, this);
-		queue.on("fileload", function(event) {
-			if (event.item.type == "image") {
-				// not sure what the image preload is really buying us here ??
-				// the DOM doesn't get updated so...
-				var img = document.createElement("img");
-				img.src = event.item.src;
+	
+	    var queue = new createjs.LoadQueue(true);
+        queue.installPlugin(createjs.Sound);
+        queue.on("complete", Game.LoadedQueue, this);
+        queue.on("fileload", function(event) {
+        	if (event.item.type == "image") {
+        		// not sure what the image preload is really buying us here ??
+        		// the DOM doesn't get updated so...
+        		var img = document.createElement("img");
+        		img.src = event.item.src;
 
-				//console.log(event.item);
-			}
-		});
+        		//console.log(event.item);
+        	}
+        });
 
 
 		for (var i=0; i<Game.Sounds.length; i++) {
@@ -105,6 +106,7 @@ var Game = {
 		
 		}
 
+	   
 		queue.load(); // handled by LoadedQueue
 	
 		document.onkeydown = function (event) {
@@ -133,16 +135,7 @@ var Game = {
 					Player.Jump();
 					break;
 				case KEY_ESCAPE: 
-					// not before a level is loaded
-					if (Game.Level) { 
-						Game.Paused = !Game.Paused;
-						if (!Game.Paused) {
-							$("#menu").hide();
-						}
-						else {
-							$("#menu").show();
-						}
-					}
+					Game.Pause();
 					break;
 				case KEY_TILDE: 
 					Game.Debug = !Game.Debug;
@@ -180,19 +173,37 @@ var Game = {
 
 	},
 	
-	LoadedQueue: function(event) {
+	Pause:function() {
+		// not before a level is loaded
+		if (Game.Level) { 
+			Game.Paused = !Game.Paused;
+			if (!Game.Paused) {
+				$("#menu").hide();
+				if (Game.Music) {
+					Game.Music.paused = false;
+				}
+			}
+			else {
+				$("#menu").show();
+				if (Game.Music) {
+					Game.Music.paused = true;
+				}
+			}
+		}
 
+	},
+	
+	LoadedQueue: function(event) {
 		Game.Stage = new createjs.Stage("canvas");    
 		Game.LoadState();
-		
-		Game.Stage.update();
 		
 		Game.Sky = Put.Sky("images/sky3.png");
 		Game.Stage.update();
 		
 		Game.UI.score = $("#score");
-		Game.UI.goal = $("#score small");          
-
+		Game.UI.goal = $("#score small");
+		
+		 
 	},
 	
 	Start: function() {
@@ -209,6 +220,12 @@ var Game = {
 		$("#menu-continue").removeClass("inactive");
 		$("#menu-continue").attr("href","#");
 		$("#menu-continue").click(Game.Resume);
+		if (Game.Settings.music) {
+			if (Game.Music) {
+				Game.Music.stop(); 
+			}
+			Game.PlayMusic();
+		}
 	},
 	
 		
@@ -217,6 +234,14 @@ var Game = {
 		Game.Paused = false;
 		if (!Game.Level) {
 			Game.LoadLevel();
+		}
+		if (Game.Settings.music) {
+			if (Game.Music) {
+				Game.Music.paused = false; 
+			}
+			else {
+				Game.PlayMusic();				
+			}
 		}
 		$("#menu").hide();
 	},
@@ -270,7 +295,7 @@ var Game = {
 	
 	
 		var dt = Date.now();
-		var map = "levels/" + Game.LevelMaps[Game.CurrentLevel-1] + "?dt=" + dt;
+		var map = "levels/" + Game.LevelMaps[Game.CurrentLevel-1] + ".js?dt=" + dt;
 		//console.log(map);
 
 		Game.Stage = new createjs.Stage("canvas");	
@@ -329,8 +354,8 @@ var Game = {
 		
 		Game.LoadedBonus = false;
 		Player.HasKey = false;
-		$("#key").html("");
 		//Player.HasKey = true; // DEBUG
+		$("#key").html("");
 		
 		Game.SaveState();
 		
@@ -509,9 +534,25 @@ var Game = {
 		}
 	},
 	
+	PlayMusic() {
+		Game.Music = createjs.Sound.play("music-6.mp3");	
+		Game.Music.on("complete",function() {
+			PlayMusic() ;
+		});
+	},
 	
 	UpdateSetting:function(setting, state) {
 		switch(setting) {
+			case "music":
+				if (Game.Music && !state) {
+					Game.Music.stop();
+					Game.Music = null;
+				}
+				else {
+					Game.PlayMusic();	
+				}
+				Game.Settings.music = state;
+				break;
 			case "sound":
 				Game.Settings.sound = state;
 				break;
