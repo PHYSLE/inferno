@@ -488,7 +488,8 @@ var Put={
 						Game.Screen.removeChild(this.Glow.Sprite);
 					}
 					Player.HasKey = true;
-					$("#key").html("&#9911;");
+					//$("#key").html("&#9911;");
+					$("#key").html('<img src="images/icon-key.png" />');
 
 					
 				}
