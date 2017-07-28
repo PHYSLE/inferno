@@ -60,20 +60,19 @@ var Game = {
 	},
 	
 	Init: function() {
-	
-	    var queue = new createjs.LoadQueue(true);
-        queue.installPlugin(createjs.Sound);
-        queue.on("complete", Game.LoadedQueue, this);
-        queue.on("fileload", function(event) {
-        	if (event.item.type == "image") {
-        		// not sure what the image preload is really buying us here ??
-        		// the DOM doesn't get updated so...
-        		var img = document.createElement("img");
-        		img.src = event.item.src;
+		var queue = new createjs.LoadQueue(true);
+		queue.installPlugin(createjs.Sound);
+		queue.on("complete", Game.LoadedQueue, this);
+		queue.on("fileload", function(event) {
+			if (event.item.type == "image") {
+				// not sure what the image preload is really buying us here ??
+				// the DOM doesn't get updated so...
+				var img = document.createElement("img");
+				img.src = event.item.src;
 
-        		//console.log(event.item);
-        	}
-        });
+				//console.log(event.item);
+			}
+		});
 
 
 		for (var i=0; i<Game.Sounds.length; i++) {
@@ -106,7 +105,6 @@ var Game = {
 		
 		}
 
-	   
 		queue.load(); // handled by LoadedQueue
 	
 		document.onkeydown = function (event) {
@@ -331,6 +329,7 @@ var Game = {
 		
 		Game.LoadedBonus = false;
 		Player.HasKey = false;
+		$("#key").html("");
 		//Player.HasKey = true; // DEBUG
 		
 		Game.SaveState();
