@@ -42,6 +42,13 @@ body {
 	margin-left:4px;
 }
 
+#key {
+	position:absolute; 
+	left:60px; 
+	top:84px; 
+	font-size:16px; 
+}
+
 #level {
 	position:absolute; 
 	left:0px; 
