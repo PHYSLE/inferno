@@ -1,6 +1,6 @@
 /* ---------------------------
 
-Copyright Â© 2007 - 2017 PHYSLE
+Copyright © 2007 - 2017 PHYSLE
 All rights reserved.
 
 --------------------------- */
