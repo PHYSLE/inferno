@@ -203,6 +203,8 @@ var Game = {
 		Game.UI.score = $("#score");
 		Game.UI.goal = $("#score small");
 		
+		$("#loading").hide(); 
+		$("#menu").show(); 
 		 
 	},
 	
@@ -256,7 +258,7 @@ var Game = {
 		
 			//state.level=12;
 		
-			console.log(cookieValue);		
+			//console.log(cookieValue);		
 			Player.Score = state.bonus;
 			Player.BonusScore = state.bonus;
 			
