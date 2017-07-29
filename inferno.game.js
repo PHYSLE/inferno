@@ -1,6 +1,6 @@
 /* ---------------------------
 
-Copyright Â© 2007 - 2017 PHYSLE
+Copyright © 2007 - 2017 PHYSLE
 All rights reserved.
 
 --------------------------- */
@@ -36,7 +36,7 @@ var Game = {
 	Yterminate:800, // point where player dies, LoadLevel will figure this out dynamically
 	Level:null,
 	LevelMaps:["100","200","300","400","500","600","700","800","900","1000","portals","secret"],
-	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","music-6","spring","turbo"],
+	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","music-7","spring","turbo"],
 	Images:["balloon","blocks","bonus","branch","coin","exit","fist","head","key","ladder",
 				"lava","particle","player_r","player_l","portal","spring","temple","turbo"],
 	Debug:false,
@@ -256,11 +256,20 @@ var Game = {
 		
 			//state.level=12;
 		
-			//console.log(cookieValue);		
+			console.log(cookieValue);		
 			Player.Score = state.bonus;
 			Player.BonusScore = state.bonus;
+			
 			Game.CurrentLevel = state.level;
 			Game.Unlock = state.unlock;
+			Game.Settings.sound = state.sound;
+			Game.Settings.music = state.music;
+			Game.Settings.efx = state.efx;
+			
+			
+			$("#opt-sound").prop( "checked", state.sound);
+			$("#opt-music").prop( "checked", state.music);
+			$("opt-effects").prop( "checked", state.efx);
 
 			if (Game.CurrentLevel > 1) {
 				$("#menu-continue").removeClass("inactive");
@@ -274,9 +283,14 @@ var Game = {
 	},
 	
 	
-	SaveState: function() {
-	//@todo - it'd be nice to save the settings too
-		var cookieValue = '{"level":'+Game.CurrentLevel+',"bonus":'+Player.BonusScore+',"unlock":'+Game.Unlock+'}';		
+	SaveState: function() {	
+		var cookieValue = '{"level":'+Game.CurrentLevel+
+						',"bonus":'+Player.BonusScore+
+						',"unlock":'+Game.Unlock+
+						',"sound":'+Game.Settings.sound+
+						',"music":'+Game.Settings.music+
+						',"efx":'+Game.Settings.efx+
+						'}';		
 
 		document.cookie = Game.CookieName + "=" + encodeURIComponent(cookieValue) +"; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 		
@@ -535,7 +549,7 @@ var Game = {
 	},
 	
 	PlayMusic() {
-		Game.Music = createjs.Sound.play("music-6.mp3");	
+		Game.Music = createjs.Sound.play("music-7.mp3");	
 		Game.Music.on("complete",function() {
 			PlayMusic() ;
 		});
@@ -550,6 +564,7 @@ var Game = {
 				}
 				else {
 					Game.PlayMusic();	
+					Game.Music.paused = true;
 				}
 				Game.Settings.music = state;
 				break;
@@ -560,6 +575,10 @@ var Game = {
 				Game.Settings.efx = state;
 				break;
 		}
+		
+		
+		Game.SaveState();
+		
 	},
 	
 	UpdateScore:function() {		
