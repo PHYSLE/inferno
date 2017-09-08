@@ -495,8 +495,18 @@ var Game = {
 					Put.Portal(gameX,gameY,current);
 				}
 				else if (isBlock(current)) {
-					var next = map[y].length > x+1 ? map[y][x+1]:null;
 					var prior = x > 0 ? map[y][x-1]:null;
+					if (isBlock(prior)) {
+						continue; // if the prior is block it should already be put
+					}
+					
+					// rather than looking forward and back 1, build all next blocks in one go
+					var n=0;
+					while (map[y].length > x+n && isBlock(map[y][x+n])) {
+						n++;
+					}
+					/*
+					var next = map[y].length > x+1 ? map[y][x+1]:null;
 					var n = 0;
 					if (isBlock(prior) && isBlock(next)) {
 						n = 2;
@@ -507,6 +517,7 @@ var Game = {
 					else if (isBlock(next)) {
 						n = 1;
 					}
+					*/
 					var b = Put.Block(gameX,gameY,n);
 
 					if (current == "v") {

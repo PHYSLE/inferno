@@ -113,18 +113,19 @@ var Put={
 
 	Block: function(x,y,i)  {
 		var SpriteSheet = new createjs.SpriteSheet({
-			images: ["images/blocks.png"],
-			frames: {width:30, height:30}
+			images: ["images/block" + i + ".png"],
+			frames: {width:30 * i, height:30}
 		});
 		
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Waypoints:[],
 			WaypointTarget:1,
+			Width:30 * i,
 			Speed:100,
 			Update:function(delta) {
 				if (this.Sprite.x < Player.Sprite.x + 35 && 
-					this.Sprite.x + 25 > Player.Sprite.x && 
+					(this.Sprite.x + this.Width) - 5 > Player.Sprite.x && 
 					this.Sprite.y < Player.Sprite.y + 50 &&
 					this.Sprite.y  > Player.Sprite.y) {
 					Player.Bounce();
