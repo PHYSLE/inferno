@@ -561,7 +561,7 @@ var Game = {
 		}
 	},
 	
-	PlayMusic() {
+	PlayMusic:function() {
 		Game.Music = createjs.Sound.play("music-7.mp3");	
 		Game.Music.on("complete",function() {
 			PlayMusic() ;
