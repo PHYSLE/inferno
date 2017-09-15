@@ -639,11 +639,11 @@ var Game = {
 		Player.Update(delta);
 		
 		Game.Sky.Update(delta);
-		/*
+
 		if (Game.Settings.efx && Game.Lava) {
 			Game.Lava.Update(delta);
 		}
-		*/
+		
 		for(var i=0; i<Game.Screen.children.length; i++) {
 			var obj = Game.Screen.children[i];
 			if(obj.UserData && typeof obj.UserData.Update === "function") {

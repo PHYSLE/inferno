@@ -552,7 +552,7 @@ var Put={
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet)
 			// this sparks implementation is just too slow, removing for now
-			/*,
+			,
 			Sparks:[],
 			SparkSheet:new createjs.SpriteSheet({
 				images: ["images/particle.png"],
@@ -561,16 +561,16 @@ var Put={
 			Update:function(delta) {
 				var spark = null;
 
-				if (Game.Ticks % 20 == 0) {
+				if (Game.Ticks % 30 == 0) {
 					spark = new createjs.Sprite(this.SparkSheet);
-					var scale = Math.random()/3;
-					var r = Math.random() * (225 - 200) + 200;
-					var g = Math.random() * (150 - 100) + 100;
+
+					var r = 200;
+					var g = 100;
 					var b = 70;
 					
 					
-					spark.scaleX = scale;
-					spark.scaleY = scale;
+					spark.scaleX = .5;
+					spark.scaleY = .5;
 				
 					spark.x=(Game.Width * Math.random() -  Game.Screen.x) / Game.Screen.scaleX;
 					spark.y=(Game.Height - Game.Screen.y) / Game.Screen.scaleY;
@@ -585,14 +585,14 @@ var Put={
 				for(var i=0; i<this.Sparks.length; i++) {
 					spark = this.Sparks[i];
 					spark.alpha -= .005;
-					spark.y-=.5;
+					spark.y-=.7;
 					if (spark.alpha <= 0) {
 						Game.Screen.removeChild(spark);
 					}
 				}
 			
 			}
-			*/
+			
 		};
 		
 		obj.Sprite = new createjs.Sprite(SpriteSheet);
