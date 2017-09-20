@@ -41,9 +41,10 @@ var Game = {
 			"lava","particle","player_r","player_l","portal","spring","temple","turbo",
 			"block1","block2","block3","block4","block5","block6"],
 	Music:{
-		passages:["music-7"],
+		passages:["passage1","passage2","passage3","passage4","passage5"],
 		index:0,
-		sound:null
+		sound:null,
+		preloaded:false
 	},
 	Debug:false,
 	MaxDelta:0, // for debugging
@@ -65,7 +66,6 @@ var Game = {
 	},
 	
 	Init: function() {
-	
 		var queue = new createjs.LoadQueue(true);
 		queue.installPlugin(createjs.Sound);
 		queue.on("complete", Game.LoadedQueue, this);
@@ -250,8 +250,8 @@ var Game = {
 			Game.LoadLevel();
 		}
 		if (Game.Settings.music) {
-			if (Game.Music) {
-				Game.Music.paused = false; 
+			if (Game.Music.sound) {
+				Game.Music.sound.paused = false; 
 			}
 			else {
 				Game.PlayMusic();
@@ -291,8 +291,7 @@ var Game = {
 				$("#menu-continue").click(Game.Resume);
 			}
 			
-		}
-		
+		}		
 		Game.JustRestored = true;		
 	},
 	
@@ -576,25 +575,31 @@ var Game = {
 	PlayMusic:function() {
 		Game.Music.sound = createjs.Sound.play(Game.Music.passages[Game.Music.index]  + ".mp3");	
 		
-		// console.log(Game.Music.sound);
 		
 		
-		Game.Music.sound.on("complete",function() {
-			Game.Music.index++;
-			if (Game.Music.index == Game.Music.passages.length) {
-				Game.Music.index =0;
-			}
-			
-			// preload the next passage so it is ready to play when this one is done
-			if (Game.Music.index > 0 /* && !sound_is_loaded_how???(Game.Music.passages[Game.Music.index+1]) */ ) {
+
+			//	createjs.Sound.registerSound("sounds/"+Game.Music.passages[Game.Music.index]+".mp3", 
+			//		Game.Music.passages[Game.Music.index + 1]+".mp3");
+
+		if (Game.Music.index < Game.Music.passages.length) {
 				var queue = new createjs.LoadQueue(true);
 				queue.installPlugin(createjs.Sound);
 				
 				var li = new createjs.LoadItem();
-				li.src = "sounds/"+Game.Music.passages[Game.Music.index]+".mp3";
-				li.id = Game.Music.passages[Game.Music.index]+".mp3";
+				li.src = "sounds/"+Game.Music.passages[Game.Music.index + 1]+".mp3";
+				li.id = Game.Music.passages[Game.Music.index + 1]+".mp3";
 				queue.loadFile(li, true);
+		}
+
+		
+		Game.Music.sound.on("complete",function() {
+
+			Game.Music.index++;
+			if (Game.Music.index == Game.Music.passages.length) {
+				Game.Music.index = 0;
+				Game.Music.preloaded = true;
 			}
+
 			Game.PlayMusic() ;
 		});
 	},
