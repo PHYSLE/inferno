@@ -36,9 +36,15 @@ var Game = {
 	Yterminate:800, // point where player dies, LoadLevel will figure this out dynamically
 	Level:null,
 	LevelMaps:["100","200","300","400","500","600","700","800","900","1000","portals","secret"],
-	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","music-7","spring","turbo"],
-	Images:["balloon","blocks","bonus","branch","coin","exit","fist","head","key","ladder",
-				"lava","particle","player_r","player_l","portal","spring","temple","turbo"],
+	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","spring","turbo"],
+	Images:["balloon","bonus","branch","coin","exit","fist","head","key","ladder",
+			"lava","particle","player_r","player_l","portal","spring","temple","turbo",
+			"block1","block2","block3","block4","block5","block6"],
+	Music:{
+		passages:["music-7"],
+		index:0,
+		sound:null
+	},
 	Debug:false,
 	MaxDelta:0, // for debugging
 	MinFPS:120, //
@@ -48,7 +54,6 @@ var Game = {
 	Bonus:null,
 	LoadedBonus:false,
 	Temple:null,
-	Music:null,
 	CookieName:"PslInf",
 	JustRestored:false,
 	Unlock:0,
@@ -87,6 +92,13 @@ var Game = {
 			queue.loadFile(li, false);
 
 		}
+		
+		// we will lazy load the remaining passages
+		var li = new createjs.LoadItem();
+		li.src = "sounds/"+Game.Music.passages[0]+".mp3";
+		li.id = Game.Music.passages[0]+".mp3";
+		queue.loadFile(li, false);
+		
 		
 		for (var i=1; i<Game.Images.length; i++) {
 			var li = new createjs.LoadItem();
@@ -179,14 +191,14 @@ var Game = {
 			Game.Paused = !Game.Paused;
 			if (!Game.Paused) {
 				$("#menu").hide();
-				if (Game.Music) {
-					Game.Music.paused = false;
+				if (Game.Music.sound) {
+					Game.Music.sound.paused = false;
 				}
 			}
 			else {
 				$("#menu").show();
-				if (Game.Music) {
-					Game.Music.paused = true;
+				if (Game.Music.sound) {
+					Game.Music.sound.paused = true;
 				}
 			}
 		}
@@ -223,8 +235,8 @@ var Game = {
 		$("#menu-continue").attr("href","#");
 		$("#menu-continue").click(Game.Resume);
 		if (Game.Settings.music) {
-			if (Game.Music) {
-				Game.Music.stop(); 
+			if (Game.Music.sound) {
+				Game.Music.sound.stop(); 
 			}
 			Game.PlayMusic();
 		}
@@ -562,22 +574,41 @@ var Game = {
 	},
 	
 	PlayMusic:function() {
-		Game.Music = createjs.Sound.play("music-7.mp3");	
-		Game.Music.on("complete",function() {
-			PlayMusic() ;
+		Game.Music.sound = createjs.Sound.play(Game.Music.passages[Game.Music.index]  + ".mp3");	
+		
+		// console.log(Game.Music.sound);
+		
+		
+		Game.Music.sound.on("complete",function() {
+			Game.Music.index++;
+			if (Game.Music.index == Game.Music.passages.length) {
+				Game.Music.index =0;
+			}
+			
+			// preload the next passage so it is ready to play when this one is done
+			if (Game.Music.index > 0 /* && !sound_is_loaded_how???(Game.Music.passages[Game.Music.index+1]) */ ) {
+				var queue = new createjs.LoadQueue(true);
+				queue.installPlugin(createjs.Sound);
+				
+				var li = new createjs.LoadItem();
+				li.src = "sounds/"+Game.Music.passages[Game.Music.index]+".mp3";
+				li.id = Game.Music.passages[Game.Music.index]+".mp3";
+				queue.loadFile(li, false);
+			}
+			Game.PlayMusic() ;
 		});
 	},
 	
 	UpdateSetting:function(setting, state) {
 		switch(setting) {
 			case "music":
-				if (Game.Music && !state) {
-					Game.Music.stop();
-					Game.Music = null;
+				if (Game.Music.sound && !state) {
+					Game.Music.sound.stop();
+					Game.Music.sound = null;
 				}
 				else {
 					Game.PlayMusic();	
-					Game.Music.paused = true;
+					Game.Music.sound.paused = true;
 				}
 				Game.Settings.music = state;
 				break;
