@@ -593,7 +593,7 @@ var Game = {
 				var li = new createjs.LoadItem();
 				li.src = "sounds/"+Game.Music.passages[Game.Music.index]+".mp3";
 				li.id = Game.Music.passages[Game.Music.index]+".mp3";
-				queue.loadFile(li, false);
+				queue.loadFile(li, true);
 			}
 			Game.PlayMusic() ;
 		});
