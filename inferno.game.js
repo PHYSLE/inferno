@@ -511,24 +511,12 @@ var Game = {
 						continue; // if the prior is block it should already be put
 					}
 					
-					// rather than looking forward and back 1, build all next blocks in one go
+					// build all next blocks into one sprite
 					var n=0;
 					while (map[y].length > x+n && isBlock(map[y][x+n])) {
 						n++;
 					}
-					/*
-					var next = map[y].length > x+1 ? map[y][x+1]:null;
-					var n = 0;
-					if (isBlock(prior) && isBlock(next)) {
-						n = 2;
-					}
-					else if (isBlock(prior)) {
-						n = 3;
-					}
-					else if (isBlock(next)) {
-						n = 1;
-					}
-					*/
+
 					var b = Put.Block(gameX,gameY,n);
 
 					if (current == "v") {
@@ -575,16 +563,7 @@ var Game = {
 	PlayMusic:function() {
 		Game.Music.sound = createjs.Sound.play(Game.Music.passages[Game.Music.index]  + ".mp3");	
 
-		if (Game.Music.index + 1 < Game.Music.passages.length) {
-			/*
-				var queue = new createjs.LoadQueue(true);
-				queue.installPlugin(createjs.Sound);
-				
-				var li = new createjs.LoadItem();
-				li.src = "sounds/"+Game.Music.passages[Game.Music.index + 1]+".mp3";
-				li.id = Game.Music.passages[Game.Music.index + 1]+".mp3";
-				queue.loadFile(li, true);
-				*/
+		if (Game.Music.index + 1 < Game.Music.passages.length && !Game.Music.preloaded) {
 			var psg = Game.Music.passages[Game.Music.index + 1];
 			createjs.Sound.registerSound("sounds/"+psg+".mp3", psg+".mp3");
 		}
