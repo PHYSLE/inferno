@@ -574,14 +574,9 @@ var Game = {
 	
 	PlayMusic:function() {
 		Game.Music.sound = createjs.Sound.play(Game.Music.passages[Game.Music.index]  + ".mp3");	
-		
-		
-		
 
-			//	createjs.Sound.registerSound("sounds/"+Game.Music.passages[Game.Music.index]+".mp3", 
-			//		Game.Music.passages[Game.Music.index + 1]+".mp3");
-
-		if (Game.Music.index < Game.Music.passages.length) {
+		if (Game.Music.index + 1 < Game.Music.passages.length) {
+			/*
 				var queue = new createjs.LoadQueue(true);
 				queue.installPlugin(createjs.Sound);
 				
@@ -589,6 +584,9 @@ var Game = {
 				li.src = "sounds/"+Game.Music.passages[Game.Music.index + 1]+".mp3";
 				li.id = Game.Music.passages[Game.Music.index + 1]+".mp3";
 				queue.loadFile(li, true);
+				*/
+			var psg = Game.Music.passages[Game.Music.index + 1];
+			createjs.Sound.registerSound("sounds/"+psg+".mp3", psg+".mp3");
 		}
 
 		
