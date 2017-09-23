@@ -433,19 +433,21 @@ var Put={
 					Game.Screen.removeChild(this.Righty.Sprite);
 					Game.Screen.removeChild(this.Lefty2.Sprite);	 
 					Game.Screen.removeChild(this.Righty2.Sprite);
+					
 					if (this.Glow) {						 
 						Game.Screen.removeChild(this.Glow.Sprite);	
 					}
-
-					Game.Temple.UnlockSlot();
+					
+					if (Game.Temple) {
+						Game.Temple.UnlockSlot();
+					}
 					
 					Player.Score+=100;
 					
 					Player.Bounce();
 					
 					Game.UpdateScore();
-
-					
+		
 				}
 			}
 		};
