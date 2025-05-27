@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/PHYSLE/inferno#readme",
   "dependencies": {
-    "createjs": "^1.0.1"
+    "createjs": "^1.0.1",
+    "vite": "^6.3.5"
   }
 }
