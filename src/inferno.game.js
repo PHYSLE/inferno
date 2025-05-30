@@ -142,25 +142,25 @@ var Game = {
 				case KEY_LEFT:	
 					if (!Game.MOVING_LEFT) {
 						// don't reanimate when holding down l/r
-						Player.Move(KEY_LEFT);
+						Player.move(KEY_LEFT);
 					}
 					Game.MOVING_LEFT = true;
 					break;
 				case KEY_RIGHT: 
 					if (!Game.MOVING_RIGHT) {
 						// don't reanimate when holding down l/r
-						Player.Move(KEY_RIGHT);
+						Player.move(KEY_RIGHT);
 					}
 					Game.MOVING_RIGHT = true;
 					break;
 				case KEY_UP: 
-					Player.Jump();
+					Player.jump();
 					break;
 				case KEY_DOWN: 
 					Game.MOVING_DOWN = true;
 					break;
 				case KEY_SPACE: 
-					Player.Jump();
+					Player.jump();
 					break;
 				case KEY_ESCAPE: 
 					Game.Pause();
@@ -242,8 +242,8 @@ var Game = {
 	},
 	
 	Start: function() {
-		Player.Score = 0;
-		Player.BonusScore = 0;
+		Player.score = 0;
+		Player.bonusScore = 0;
 		if (Game.Unlock > 0) {
 			Game.CurrentLevel = 11;
 		}
@@ -292,8 +292,8 @@ var Game = {
 			//state.level=12;
 		
 			//console.log(cookieValue);		
-			Player.Score = state.bonus;
-			Player.BonusScore = state.bonus;
+			Player.score = state.bonus;
+			Player.bonusScore = state.bonus;
 			
 			Game.CurrentLevel = state.level;
 			Game.Unlock = state.unlock;
@@ -318,7 +318,7 @@ var Game = {
 	
 	SaveState: function() {	
 		var cookieValue = '{"level":'+Game.CurrentLevel+
-						',"bonus":'+Player.BonusScore+
+						',"bonus":'+Player.bonusScore+
 						',"unlock":'+Game.Unlock+
 						',"sound":'+Game.Settings.sound+
 						',"music":'+Game.Settings.music+
@@ -380,7 +380,7 @@ var Game = {
 		}
 		/*
 		if (Game.Screen) { // hack to show last level in screen2
-			Game.Screen.removeChild(Player.Sprite);	
+			Game.Screen.removeChild(Player.sprite);	
 			Game.Screen2 = Game.Screen;
 			Game.Screen2.scaleX = .4;
 			Game.Screen2.scaleY = .4;
@@ -396,16 +396,16 @@ var Game = {
 		}
 		
 		Game.LoadedBonus = false;
-		Player.HasKey = false;
-		//Player.HasKey = true; // DEBUG
+		Player.hasKey = false;
+		//Player.hasKey = true; // DEBUG
 		$("#key").innerHTML='';
 		
 		Game.SaveState();
 		
 		Game.ParseMap(Game.Level.map);		
 		Game.Yterminate += 160;
-		Game.Ytarget = -(Player.Sprite.y) + Game.Ycamoffset;
-		Game.Screen.y = -(Player.Sprite.y) + Game.Ycamoffset;
+		Game.Ytarget = -(Player.sprite.y) + Game.Ycamoffset;
+		Game.Screen.y = -(Player.sprite.y) + Game.Ycamoffset;
 		
 		if (Game.CurrentLevel == 11) {
 			Game.Goal = 300;
@@ -428,7 +428,7 @@ var Game = {
 	
 	LoadBonus:function() {
 		// move last screen to 2
-		Game.Screen.removeChild(Player.Sprite);	
+		Game.Screen.removeChild(Player.sprite);	
 		Game.Screen2 = Game.Screen;	
 		
 		// load bonus on main screen
@@ -450,16 +450,16 @@ var Game = {
 	
 	ExitBonus:function() {
 		// swap the screens except for the player		
-		Game.Screen.removeChild(Player.Sprite);		
-		Game.Screen2.addChild(Player.Sprite);
+		Game.Screen.removeChild(Player.sprite);		
+		Game.Screen2.addChild(Player.sprite);
 		
 		var temp = Game.Screen;
 
 		Game.Screen = Game.Screen2 ;
 		Game.Screen2 = temp;	
 
-		Player.Sprite.x = Game.Bonus.Sprite.x;
-		Player.Sprite.y = Game.Bonus.Sprite.y;
+		Player.sprite.x = Game.Bonus.Sprite.x;
+		Player.sprite.y = Game.Bonus.Sprite.y;
 	
 	},
 	
@@ -567,7 +567,7 @@ var Game = {
 		
 		} // end map iteration
 	
-		Player.Init(px,py);
+		Player.init(px,py);
 	
 	},
 	
@@ -625,12 +625,12 @@ var Game = {
 	},
 	
 	UpdateScore:function() {		
-		Game.UI.score.innerHTML=Player.Score
+		Game.UI.score.innerHTML=Player.score
 		Game.UI.goal.innerHTML = Game.Goal;
-		if (Player.Score < Game.Goal) {
+		if (Player.score < Game.Goal) {
 			Game.UI.goal.style.color= "red";
 		}
-		else if (Player.Score == Game.Goal) {
+		else if (Player.score == Game.Goal) {
 			Game.UI.goal.style.color= "white";
 			console.log("Game.UI.goal.style.color=" + Game.UI.goal.style.color)
 			if (Game.Exit) Game.Exit.Sprite.gotoAndStop(1);
@@ -658,7 +658,7 @@ var Game = {
 				+"<br />Min FPS: "+ Game.MinFPS
 				+"<br />Delta: "+delta.toFixed(3) 
 				+"<br />Max Delta: "+ Game.MaxDelta.toFixed(3) 
-				+"<br />Player: " + Player.Sprite.x.toFixed(1) +"," + Player.Sprite.y.toFixed(1)
+				+"<br />Player: " + Player.sprite.x.toFixed(1) +"," + Player.sprite.y.toFixed(1)
 				+"<br />Screen: " + Game.Screen.x.toFixed(1) +"," + Game.Screen.y.toFixed(1) 
 				+"<br />Objects: "+Game.Screen.children.length);
 			*/
@@ -671,7 +671,7 @@ var Game = {
 		if (delta > .08) {
 			delta = .08; // avoid too big of a step with dip in fps
 		}
-		Player.Update(delta);
+		Player.update(delta);
 		
 		Game.Sky.Update(delta);
 
@@ -693,10 +693,10 @@ var Game = {
 		} 
 		
 		if (Game.Screen2) {
-			Game.Screen2.x = -Player.Sprite.x.toFixed(0)  * Game.Screen2.scaleY + Game.Width/2  ;
+			Game.Screen2.x = -Player.sprite.x.toFixed(0)  * Game.Screen2.scaleY + Game.Width/2  ;
 		}
 		
-		Game.Screen.x = -Player.Sprite.x.toFixed(0)  * Game.Screen.scaleY + Game.Width/2  ;
+		Game.Screen.x = -Player.sprite.x.toFixed(0)  * Game.Screen.scaleY + Game.Width/2  ;
 		// 50 worked without jitters
 		if (Math.abs(Game.Screen.y - Game.Ytarget * Game.Screen.scaleY) > Game.Ycamspeed/50) {
 			if (Game.Screen.y > Game.Ytarget * Game.Screen.scaleY) {
@@ -713,21 +713,21 @@ var Game = {
 		}
 		
 		// don't let player out of screen
-		if (-Game.Screen.y > Player.Sprite.y * Game.Screen.scaleY) {
+		if (-Game.Screen.y > Player.sprite.y * Game.Screen.scaleY) {
 
-			Game.Screen.y = -Player.Sprite.y * Game.Screen.scaleY;
+			Game.Screen.y = -Player.sprite.y * Game.Screen.scaleY;
 		}
-		else if (-(Game.Screen.y - (Game.Height - 50)) < Player.Sprite.y * Game.Screen.scaleY) { 
-			Game.Screen.y = -Player.Sprite.y * Game.Screen.scaleY + (Game.Height - 50); // 25 = 1/2 player
+		else if (-(Game.Screen.y - (Game.Height - 50)) < Player.sprite.y * Game.Screen.scaleY) { 
+			Game.Screen.y = -Player.sprite.y * Game.Screen.scaleY + (Game.Height - 50); // 25 = 1/2 player
 	
 		}
 		
 		
-		if (Player.Sprite.y > Game.Yterminate) {
+		if (Player.sprite.y > Game.Yterminate) {
 			// dead
 			
 			Game.PlaySound("death");
-			Player.Score = Player.BonusScore;
+			Player.score = Player.bonusScore;
 			Game.LoadLevel();
 		}
 		

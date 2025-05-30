@@ -19,16 +19,16 @@ var Put={
 			FloatVelocity:0,
 			FloatMax:12,
 			Update:function(delta) {
-				if (this.Sprite.x < Player.Sprite.x + 35 && 
-					this.Sprite.x + 25 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 &&
-					this.Sprite.y  > Player.Sprite.y) {
+				if (this.Sprite.x < Player.sprite.x + 35 && 
+					this.Sprite.x + 25 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 &&
+					this.Sprite.y  > Player.sprite.y) {
 					
 					Game.PlaySound("bounce");
 					
 					this.Sprite.y+=20;
-					Player.Bounce();
-					Player.GForce = -(Player.BounceVelocity * 2);	
+					Player.bounce();
+					Player.gForce = -(Player.bounceVelocity * 2);	
 					this.FloatVelocity = -60;
 					
 				}
@@ -56,11 +56,11 @@ var Put={
 		var obj = {			
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Update:function(delta) {
-				if(	Player.HasKey &&
-					this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 25 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if(	Player.hasKey &&
+					this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 25 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 						if (!Game.LoadedBonus) {
 							Game.PlaySound("door");
 							Game.LoadBonus();
@@ -92,11 +92,11 @@ var Put={
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Glow:null,
 			Update:function(delta) {
-				if(	Player.HasKey &&
-					this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 25 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if(	Player.hasKey &&
+					this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 25 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 					Game.ExitBonus();
 					
 					Game.PlaySound("harp");
@@ -127,11 +127,11 @@ var Put={
 			Width:30 * i,
 			Speed:100,
 			Update:function(delta) {
-				if (this.Sprite.x < Player.Sprite.x + 35 && 
-					(this.Sprite.x + this.Width) - 5 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 &&
-					this.Sprite.y  > Player.Sprite.y) {
-					Player.Bounce();
+				if (this.Sprite.x < Player.sprite.x + 35 && 
+					(this.Sprite.x + this.Width) - 5 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 &&
+					this.Sprite.y  > Player.sprite.y) {
+					Player.bounce();
 				}
 				
 				if (this.Waypoints && this.Waypoints.length > 0) {
@@ -195,16 +195,16 @@ var Put={
 				}
 			
 				if (!this.Broken &&
-					this.Sprite.x < Player.Sprite.x + 40 && 
-					this.Sprite.x + 40 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 &&
-					this.Sprite.y  > Player.Sprite.y) {
+					this.Sprite.x < Player.sprite.x + 40 && 
+					this.Sprite.x + 40 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 &&
+					this.Sprite.y  > Player.sprite.y) {
 					
 					Game.PlaySound("branch");
 					this.Sprite.gotoAndPlay("branch");
 					this.Broken = true;
 
-					Player.Bounce();				
+					Player.bounce();				
 				}
 				
 			}
@@ -247,10 +247,10 @@ var Put={
 						this.Expanding = true;
 					}
 				}
-				if (this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 12 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if (this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 12 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 
 					Game.PlaySound("coins");
 					
@@ -267,7 +267,7 @@ var Put={
 						Game.Screen.removeChild(this.Glow.Sprite);
 					}
 
-					Player.Score+=10;
+					Player.score+=10;
 					Game.UpdateScore();
 					
 				}
@@ -316,16 +316,16 @@ var Put={
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Update:function(delta) {
-				if(	Player.Score >= Game.Goal &&
-					this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 25 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if(	Player.score >= Game.Goal &&
+					this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 25 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 					
 					Game.PlaySound("harp2");
-					Player.Score -= Game.Goal;
+					Player.score -= Game.Goal;
 					// save bonus
-					Player.BonusScore = Player.Score;
+					Player.bonusScore = Player.score;
 					Game.CurrentLevel++;
 					Game.LoadLevel();
 				}
@@ -367,20 +367,20 @@ var Put={
 				this.Sprite.y = this.InitY + (Math.sin(this.Facing) * 100);
 				
 				
-				if (this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 15 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if (this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 15 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 					
 					
 					Game.PlaySound("bounce");
 					//console.log("Punched in the face!");
 					
 					if (this.Side == 'r') {
-						Player.GPunch = 1000;
+						Player.gPunch = 1000;
 					}
 					else {
-						Player.GPunch = -1000;
+						Player.gPunch = -1000;
 					}
 				}
 			}
@@ -416,10 +416,10 @@ var Put={
 			Glow:Put.particle(x-20, y-24, 255, 185, 100),
 			Update:function(delta) {
 
-				if (this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 12 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if (this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 12 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 
 					var text = new createjs.Text("100", "20px InfernoFont", "#f0be00");
 					text.x = this.Sprite.x-6;
@@ -445,9 +445,9 @@ var Put={
 						Game.Temple.UnlockSlot();
 					}
 					
-					Player.Score+=100;
+					Player.score+=100;
 					
-					Player.Bounce();
+					Player.bounce();
 					
 					Game.UpdateScore();
 		
@@ -481,17 +481,17 @@ var Put={
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Glow:Put.particle(x-15, y-15, 255, 185, 100),
 			Update:function(delta) {
-				if (this.Sprite.x < Player.Sprite.x + 50 && 
-					this.Sprite.x + 12 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && 
-					this.Sprite.y  > Player.Sprite.y) {
+				if (this.Sprite.x < Player.sprite.x + 50 && 
+					this.Sprite.x + 12 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && 
+					this.Sprite.y  > Player.sprite.y) {
 
 					Game.PlaySound("key");
 					Game.Screen.removeChild(this.Sprite);		
 					if (this.Glow) {	 
 						Game.Screen.removeChild(this.Glow.Sprite);
 					}
-					Player.HasKey = true;
+					Player.hasKey = true;
 					//$("#key").html("&#9911;");
 					document.getElementById('key').innerHTML='<img src="/assets/images/icon-key.png" />';
 				}
@@ -516,15 +516,15 @@ var Put={
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Update:function(delta) {
-				if (this.Sprite.x+16 < Player.Sprite.x + 50 && 
-					this.Sprite.x+16 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 50 && // allow going down
-					this.Sprite.y > Player.Sprite.y) {
+				if (this.Sprite.x+16 < Player.sprite.x + 50 && 
+					this.Sprite.x+16 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 50 && // allow going down
+					this.Sprite.y > Player.sprite.y) {
 					if (Game.MOVING_DOWN) {
-						Player.GForce=500;
+						Player.gForce=500;
 					}
 					else {
-						Player.GForce=-500;			
+						Player.gForce=-500;			
 					}	
 
 				}
@@ -643,12 +643,12 @@ var Put={
 			Sprite:new createjs.Sprite(SpriteSheet),
 			LevelTarget:n,
 			Update:function(delta) {
-				if(this.Sprite.x+42 < Player.Sprite.x + 50 && 
-					this.Sprite.x+67  > Player.Sprite.x && 
-					this.Sprite.y+120 < Player.Sprite.y + 50 && 
-					this.Sprite.y+120  > Player.Sprite.y) {
+				if(this.Sprite.x+42 < Player.sprite.x + 50 && 
+					this.Sprite.x+67  > Player.sprite.x && 
+					this.Sprite.y+120 < Player.sprite.y + 50 && 
+					this.Sprite.y+120  > Player.sprite.y) {
 						Game.PlaySound("harp2");
-						Player.BonusScore = 0;
+						Player.bonusScore = 0;
 						Game.CurrentLevel=this.LevelTarget;
 						Game.LoadLevel();
 				}
@@ -681,7 +681,7 @@ var Put={
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Update:function(delta) {
 
-				this.Sprite.x = -Player.Sprite.x/20;
+				this.Sprite.x = -Player.sprite.x/20;
 				this.Sprite.y = -(Game.Ycamera/90);//+200;
 			}
 		}
@@ -703,15 +703,15 @@ var Put={
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Update:function(delta) {
-				if (this.Sprite.x+16 < Player.Sprite.x + 50 && 
-					this.Sprite.x+16 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 100 && // adjust for regY offset
-					this.Sprite.y > Player.Sprite.y) {
+				if (this.Sprite.x+16 < Player.sprite.x + 50 && 
+					this.Sprite.x+16 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 100 && // adjust for regY offset
+					this.Sprite.y > Player.sprite.y) {
 					
 					Game.PlaySound("spring");
 					
-					Player.Bounce();
-					Player.GForce = -(Player.BounceVelocity * 2);	
+					Player.bounce();
+					Player.gForce = -(Player.bounceVelocity * 2);	
 					this.Sprite.scaleY = .1;
 					
 				}
@@ -751,13 +751,13 @@ var Put={
 					}
 				}
 				
-				if(this.Slots.length == 4 && Player.Score >= Game.Goal &&
-					this.Sprite.x+210 < Player.Sprite.x + 50 && 
-					this.Sprite.x+210+25  > Player.Sprite.x && 
-					this.Sprite.y+200 < Player.Sprite.y + 50 && 
-					this.Sprite.y+200 > Player.Sprite.y) {
+				if(this.Slots.length == 4 && Player.score >= Game.Goal &&
+					this.Sprite.x+210 < Player.sprite.x + 50 && 
+					this.Sprite.x+210+25  > Player.sprite.x && 
+					this.Sprite.y+200 < Player.sprite.y + 50 && 
+					this.Sprite.y+200 > Player.sprite.y) {
 						Game.Unlock=1;
-						Player.Score -= Game.Goal;
+						Player.score -= Game.Goal;
 						Game.PlaySound("harp2");
 						Game.CurrentLevel=11;
 						Game.LoadLevel();
@@ -818,17 +818,17 @@ var Put={
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
 			Update:function(delta) {
-				if (this.Sprite.x+16 < Player.Sprite.x + 50 && 
-					this.Sprite.x+16 > Player.Sprite.x && 
-					this.Sprite.y < Player.Sprite.y + 100 && // adjust for regY offset
-					this.Sprite.y > Player.Sprite.y) {
+				if (this.Sprite.x+16 < Player.sprite.x + 50 && 
+					this.Sprite.x+16 > Player.sprite.x && 
+					this.Sprite.y < Player.sprite.y + 100 && // adjust for regY offset
+					this.Sprite.y > Player.sprite.y) {
 					
 					
 					Game.PlaySound("turbo");
 					
 					
-					Player.Bounce();
-					Player.GForce = -(Player.BounceVelocity * 5);	
+					Player.bounce();
+					Player.gForce = -(Player.bounceVelocity * 5);	
 					
 				}
 			}
