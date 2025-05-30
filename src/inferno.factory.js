@@ -332,7 +332,6 @@ var Put={
 			}
 		};
 	
-		obj.sprite = new createjs.Sprite(spriteSheet);
 		obj.sprite.gotoAndStop(0);
 		obj.sprite.x=x;
 		obj.sprite.y=y;
@@ -596,7 +595,7 @@ var Put={
 			
 		};
 		
-		obj.sprite = new createjs.Sprite(spriteSheet);
+
 		obj.sprite.filters=[new createjs.ColorFilter(1, 1, 1, 1, -(255-r), -(255-g), -(255-b))];
 		obj.sprite.gotoAndPlay(0);
 		obj.sprite.x=x;
@@ -649,12 +648,12 @@ var Put={
 					this.sprite.y+120  > Player.sprite.y) {
 						Game.playSound("harp2");
 						Player.bonusScore = 0;
-						Game.currentLevel=this.LevelTarget;
+						Game.currentLevel=this.levelTarget;
 						Game.loadLevel();
 				}
 			}
 		};
-		obj.sprite = new createjs.Sprite(spriteSheet);
+
 		obj.sprite.x=x;
 		obj.sprite.y=y;
 
@@ -799,7 +798,7 @@ var Put={
 			}
 		};
 	
-		obj.sprite = new createjs.Sprite(spriteSheet);
+
 		obj.sprite.gotoAndStop(1);
 		obj.sprite.x=x;
 		obj.sprite.y=y;
