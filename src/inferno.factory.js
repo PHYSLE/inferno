@@ -9,7 +9,7 @@ import Game from '/src/inferno.game.js';
 import Player from '/src/inferno.player.js';
 
 var Put={
-	Balloon: function(x,y)  {
+	balloon: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/balloon.png"]
 			,frames: {width:30, height:40}
@@ -47,7 +47,7 @@ var Put={
 		return obj;
 	},
 	
-	Bonus: function(x,y) {
+	bonus: function(x,y) {
 		var SpriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/bonus.png"],
 			frames: {width:60, height:65}
@@ -82,7 +82,7 @@ var Put={
 	},
 
 
-	BonusExit: function(x,y) {
+	bonusExit: function(x,y) {
 		var SpriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/bonus.png"],
 			frames: {width:60, height:65}
@@ -114,7 +114,7 @@ var Put={
 		return obj;
 	},
 
-	Block: function(x,y,i)  {
+	block: function(x,y,i)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/block" + i + ".png"],
 			frames: {width:30 * i, height:30}
@@ -173,7 +173,7 @@ var Put={
 		return obj;
 	},	
 
-	Branch: function(x,y)  {
+	branch: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/branch.png"],
 			frames: {width:60, height:60},
@@ -222,7 +222,7 @@ var Put={
 		return obj;
 	},	
 	
-	Coin: function(x,y)  {
+	coin: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/coin.png"],
 			frames: {width:24, height:24}
@@ -230,7 +230,7 @@ var Put={
 	
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
-			Glow:Put.Particle(x-23, y-15, 255, 185, 100),
+			Glow:Put.particle(x-23, y-15, 255, 185, 100),
 			Expanding:false,
 			Update:function(delta) {
 				if (this.Expanding) {
@@ -288,7 +288,7 @@ var Put={
 
 	
 	
-	Entrance: function(x,y) {
+	entrance: function(x,y) {
 		var SpriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/exit.png"],
 			frames: {width:60, height:65}
@@ -307,7 +307,7 @@ var Put={
 		return obj;
 	},
 	
-	Exit: function(x,y) {
+	exit: function(x,y) {
 		var SpriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/exit.png"],
 			frames: {width:60, height:65}
@@ -342,7 +342,7 @@ var Put={
 		return obj;
 	},
 
-	Fist: function(x, y, rl) {
+	fist: function(x, y, rl) {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/fist.png"],
 			frames: {width:30, height:30}
@@ -401,7 +401,7 @@ var Put={
 		return obj;
 	},
 
-	Guard: function(x,y)  {
+	guard: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/head.png"],
 			frames: {width:36, height:33}
@@ -409,11 +409,11 @@ var Put={
 	
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
-			Lefty:Put.Fist(x-115, y-30, 'l'),
-			Lefty2:Put.Fist(x-115, y+30, 'l'),
-			Righty:Put.Fist(x+115, y-30, 'r'),
-			Righty2:Put.Fist(x+115, y+30, 'r'),
-			Glow:Put.Particle(x-20, y-24, 255, 185, 100),
+			Lefty:Put.fist(x-115, y-30, 'l'),
+			Lefty2:Put.fist(x-115, y+30, 'l'),
+			Righty:Put.fist(x+115, y-30, 'r'),
+			Righty2:Put.fist(x+115, y+30, 'r'),
+			Glow:Put.particle(x-20, y-24, 255, 185, 100),
 			Update:function(delta) {
 
 				if (this.Sprite.x < Player.Sprite.x + 50 && 
@@ -471,7 +471,7 @@ var Put={
 		return obj;
 	},
 
-	Key: function(x,y)  {
+	key: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/key.png"],
 			frames: {width:20, height:47}
@@ -479,7 +479,7 @@ var Put={
 	
 		var obj = {
 			Sprite:new createjs.Sprite(SpriteSheet),
-			Glow:Put.Particle(x-15, y-15, 255, 185, 100),
+			Glow:Put.particle(x-15, y-15, 255, 185, 100),
 			Update:function(delta) {
 				if (this.Sprite.x < Player.Sprite.x + 50 && 
 					this.Sprite.x + 12 > Player.Sprite.x && 
@@ -508,7 +508,7 @@ var Put={
 		return obj;
 	},
 	
-	Ladder: function(x,y)  {
+	ladder: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/ladder.png"]
 			,frames: {width:30, height:60}
@@ -540,7 +540,7 @@ var Put={
 		return obj;
 	},	
 	
-	Lava:function(x,y,r,g,b)  {
+	lava:function(x,y,r,g,b)  {
 		if (!Game.Settings.efx) {
 			return null;
 		}
@@ -608,7 +608,7 @@ var Put={
 		Game.Stage.addChild(obj.Sprite);
 		return obj;
 	},	
-	Particle:function(x,y,r,g,b)  {
+	particle:function(x,y,r,g,b)  {
 		if (!Game.Settings.efx) {
 			return null;
 		}
@@ -633,7 +633,7 @@ var Put={
 		return obj;
 	},
 	
-	Portal:function(x,y,n)  {
+	portal:function(x,y,n)  {
 		var	SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/portal.png"],
 			frames: {width:120, height:186}
@@ -672,7 +672,7 @@ var Put={
 		return obj;
 	},
 	
-	Sky: function(url)  {
+	sky: function(url)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: [url]
 			,frames: {width:2000, height:280}
@@ -695,7 +695,7 @@ var Put={
 		return obj;
 	},	
 
-	Spring: function(x,y)  {
+	spring: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/spring.png"]
 			,frames: {width:30, height:60}
@@ -735,7 +735,7 @@ var Put={
 		return obj;
 	},	
 
-	Temple: function(x,y) {
+	temple: function(x,y) {
 		var SpriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/temple.png"],
 			frames: {width:470, height:280}
@@ -810,7 +810,7 @@ var Put={
 		return obj;
 	},
 
-	Turbo: function(x,y)  {
+	turbo: function(x,y)  {
 		var SpriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/turbo.png"]
 			,frames: {width:30, height:62}

@@ -226,7 +226,7 @@ var Game = {
 		Game.Stage = new createjs.Stage("canvas");    
 		Game.LoadState();
 		
-		Game.Sky = Put.Sky("/assets/images/sky3.png");
+		Game.Sky = Put.sky("/assets/images/sky3.png");
 		Game.Stage.update();
 		
 		Game.UI.score = $("#score");
@@ -375,7 +375,7 @@ var Game = {
 		
 		Game.Level = data;
 		if (Game.Level.sky) {
-			Game.Sky = Put.Sky(Game.Level.sky);
+			Game.Sky = Put.sky(Game.Level.sky);
 		
 		}
 		/*
@@ -413,10 +413,10 @@ var Game = {
 		Game.UpdateScore();
 		
 		if (Game.Level.sky == "/assets/images/sky1.png" || Game.Level.sky == "/assets/images/sky2.png") {
-			Game.Lava = Put.Lava(0, 550, 255, 0, 0);
+			Game.Lava = Put.lava(0, 550, 255, 0, 0);
 		}
 		else {
-			Game.Lava = Put.Lava(0, 550, 255, 180, 0);
+			Game.Lava = Put.lava(0, 550, 255, 180, 0);
 		}
 		
 		if (!Game.JustRestored) {
@@ -481,46 +481,46 @@ var Game = {
 					py = gameY;
 				}
 				else if (current == "$") {
-					Put.Coin(gameX+15,gameY);
+					Put.coin(gameX+15,gameY);
 				}
 				else if (current == "#") {
-					Put.Ladder(gameX,gameY);
+					Put.ladder(gameX,gameY);
 				}
 				else if (current == "z") {
-					Put.Spring(gameX,gameY);
+					Put.spring(gameX,gameY);
 				}
 				else if (current == "w") {
-					Put.Turbo(gameX,gameY);
+					Put.turbo(gameX,gameY);
 				}
 				else if (current == "@") {
-					Put.Balloon(gameX,gameY);
+					Put.balloon(gameX,gameY);
 				}
 				else if (current == "-") {
-					Put.Branch(gameX,gameY);
+					Put.branch(gameX,gameY);
 				}
 				else if (current == "?") {
-					Put.Key(gameX,gameY);
+					Put.key(gameX,gameY);
 				}
 				else if (current == "b") {
-					Game.Bonus = Put.Bonus(gameX,gameY);
+					Game.Bonus = Put.bonus(gameX,gameY);
 				}
 				else if (current == "e") {
-					Put.BonusExit(gameX,gameY);
+					Put.bonusExit(gameX,gameY);
 				}
 				else if (current == "n") {
-					Game.Exit = Put.Exit(gameX,gameY);
+					Game.Exit = Put.exit(gameX,gameY);
 				}
 				else if (current == "m") {
-					Put.Entrance(gameX,gameY);
+					Put.entrance(gameX,gameY);
 				}
 				else if (current == "g") {
-					Put.Guard(gameX,gameY);
+					Put.guard(gameX,gameY);
 				}
 				else if (current == "t") {
-					Game.Temple = Put.Temple(gameX,gameY);
+					Game.Temple = Put.temple(gameX,gameY);
 				}
 				else if (/^\d$/.test(current)) {
-					Put.Portal(gameX,gameY,current);
+					Put.portal(gameX,gameY,current);
 				}
 				else if (isBlock(current)) {
 					var prior = x > 0 ? map[y][x-1]:null;
@@ -534,7 +534,7 @@ var Game = {
 						n++;
 					}
 
-					var b = Put.Block(gameX,gameY,n);
+					var b = Put.block(gameX,gameY,n);
 
 					if (current == "v") {
 						b.Waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY+300}];
@@ -627,10 +627,12 @@ var Game = {
 	UpdateScore:function() {		
 		Game.UI.score.innerHTML=Player.Score
 		Game.UI.goal.innerHTML = Game.Goal;
-		Game.UI.goal.style.color= "red";
-		
-		if (Player.Score == Game.Goal) {
+		if (Player.Score < Game.Goal) {
+			Game.UI.goal.style.color= "red";
+		}
+		else if (Player.Score == Game.Goal) {
 			Game.UI.goal.style.color= "white";
+			console.log("Game.UI.goal.style.color=" + Game.UI.goal.style.color)
 			if (Game.Exit) Game.Exit.Sprite.gotoAndStop(1);
 			
 			Game.PlaySound("door");
