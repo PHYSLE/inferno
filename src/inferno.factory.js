@@ -10,199 +10,199 @@ import Player from '/src/inferno.player.js';
 
 var Put={
 	balloon: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/balloon.png"]
 			,frames: {width:30, height:40}
 		});
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			FloatVelocity:0,
-			FloatMax:12,
-			Update:function(delta) {
-				if (this.Sprite.x < Player.sprite.x + 35 && 
-					this.Sprite.x + 25 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 &&
-					this.Sprite.y  > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			floatVelocity:0,
+			floatMax:12,
+			update:function(delta) {
+				if (this.sprite.x < Player.sprite.x + 35 && 
+					this.sprite.x + 25 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 &&
+					this.sprite.y  > Player.sprite.y) {
 					
-					Game.PlaySound("bounce");
+					Game.playSound("bounce");
 					
-					this.Sprite.y+=20;
+					this.sprite.y+=20;
 					Player.bounce();
 					Player.gForce = -(Player.bounceVelocity * 2);	
-					this.FloatVelocity = -60;
+					this.floatVelocity = -60;
 					
 				}
-				if (this.FloatVelocity < this.FloatMax) {
-					this.FloatVelocity++;
+				if (this.floatVelocity < this.floatMax) {
+					this.floatVelocity++;
 				}
-				this.Sprite.y -= delta*this.FloatVelocity;
+				this.sprite.y -= delta*this.floatVelocity;
 			}
 		}
 		
-		obj.Sprite.x=x;
-		obj.Sprite.y=y+30;
-		obj.Sprite.UserData = obj;
-		Game.Screen.addChild(obj.Sprite);
+		obj.sprite.x=x;
+		obj.sprite.y=y+30;
+		obj.sprite.UserData = obj;
+		Game.screen.addChild(obj.sprite);
 
 		return obj;
 	},
 	
 	bonus: function(x,y) {
-		var SpriteSheet= new createjs.SpriteSheet({
+		var spriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/bonus.png"],
 			frames: {width:60, height:65}
 		});
 		
 		var obj = {			
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
 				if(	Player.hasKey &&
-					this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 25 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
-						if (!Game.LoadedBonus) {
-							Game.PlaySound("door");
-							Game.LoadBonus();
+					this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 25 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
+						if (!Game.loadedBonus) {
+							Game.playSound("door");
+							Game.loadBonus();
 						}
-						Game.LoadedBonus = true;
-						this.Sprite.gotoAndStop(1);
+						Game.loadedBonus = true;
+						this.sprite.gotoAndStop(1);
 				}
 			}
 		};
 
-		obj.Sprite.gotoAndStop(Game.LoadedBonus?1:0);
+		obj.sprite.gotoAndStop(Game.loadedBonus?1:0);
 
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 	
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},
 
 
 	bonusExit: function(x,y) {
-		var SpriteSheet= new createjs.SpriteSheet({
+		var spriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/bonus.png"],
 			frames: {width:60, height:65}
 		});
 		
 		var obj = {			
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Glow:null,
-			Update:function(delta) {
+			sprite:new createjs.Sprite(spriteSheet),
+			glow:null,
+			update:function(delta) {
 				if(	Player.hasKey &&
-					this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 25 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
-					Game.ExitBonus();
+					this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 25 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
+					Game.exitBonus();
 					
-					Game.PlaySound("harp");
+					Game.playSound("harp");
 				}
 			}
 		};
 
-		obj.Sprite.gotoAndStop(1);
+		obj.sprite.gotoAndStop(1);
 		
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 	
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},
 
 	block: function(x,y,i)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/block" + i + ".png"],
 			frames: {width:30 * i, height:30}
 		});
 		
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Waypoints:[],
-			WaypointTarget:1,
-			Width:30 * i,
-			Speed:100,
-			Update:function(delta) {
-				if (this.Sprite.x < Player.sprite.x + 35 && 
-					(this.Sprite.x + this.Width) - 5 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 &&
-					this.Sprite.y  > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			waypoints:[],
+			waypointTarget:1,
+			width:30 * i,
+			speed:100,
+			update:function(delta) {
+				if (this.sprite.x < Player.sprite.x + 35 && 
+					(this.sprite.x + this.width) - 5 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 &&
+					this.sprite.y  > Player.sprite.y) {
 					Player.bounce();
 				}
 				
-				if (this.Waypoints && this.Waypoints.length > 0) {
-					var i = this.WaypointTarget % this.Waypoints.length;					
-					var xd = Math.abs(this.Sprite.x - this.Waypoints[i].x);
-					var yd = Math.abs(this.Sprite.y - this.Waypoints[i].y);
+				if (this.waypoints && this.waypoints.length > 0) {
+					var i = this.waypointTarget % this.waypoints.length;					
+					var xd = Math.abs(this.sprite.x - this.waypoints[i].x);
+					var yd = Math.abs(this.sprite.y - this.waypoints[i].y);
 
-					if (xd <= delta*this.Speed && yd <= delta*this.Speed) {
+					if (xd <= delta*this.speed && yd <= delta*this.speed) {
 						// arrived
-						this.Sprite.x = this.Waypoints[i].x;
-						this.Sprite.y = this.Waypoints[i].y;
-						this.WaypointTarget++;
+						this.sprite.x = this.waypoints[i].x;
+						this.sprite.y = this.waypoints[i].y;
+						this.waypointTarget++;
 					}
 					else {
-						if (this.Sprite.x < this.Waypoints[i].x) {
-							this.Sprite.x += delta*this.Speed;
+						if (this.sprite.x < this.waypoints[i].x) {
+							this.sprite.x += delta*this.speed;
 						}
-						else if (this.Sprite.x > this.Waypoints[i].x) {
-							this.Sprite.x -= delta*this.Speed;
+						else if (this.sprite.x > this.waypoints[i].x) {
+							this.sprite.x -= delta*this.speed;
 						}
 					
-						if (this.Sprite.y < this.Waypoints[i].y) {
-							this.Sprite.y += delta*this.Speed;
+						if (this.sprite.y < this.waypoints[i].y) {
+							this.sprite.y += delta*this.speed;
 						}
-						else if (this.Sprite.y > this.Waypoints[i].y) {
-							this.Sprite.y -= delta*this.Speed;
+						else if (this.sprite.y > this.waypoints[i].y) {
+							this.sprite.y -= delta*this.speed;
 						}			
 					}
 				}
 			}
 		}
 
-		obj.Sprite.gotoAndStop(i);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.gotoAndStop(i);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 		
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},	
 
 	branch: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/branch.png"],
 			frames: {width:60, height:60},
 			animations: {break:{frames:[1,2,3,4,5], next: false, speed:.8 }}
 		});
 		var obj = {
-			Broken:false,
-			GForce:0,
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
+			broken:false,
+			gForce:0,
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
 			
-				if (this.Broken) {
-					this.GForce += Game.Gravity;
-					this.Sprite.y += delta*this.GForce;
-					this.Sprite.alpha -= .02;
+				if (this.broken) {
+					this.gForce += Game.gravity;
+					this.sprite.y += delta*this.gForce;
+					this.sprite.alpha -= .02;
 					
 					//@TODO- remove the obj after yterminate
 				
 				}
 			
 				if (!this.Broken &&
-					this.Sprite.x < Player.sprite.x + 40 && 
-					this.Sprite.x + 40 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 &&
-					this.Sprite.y  > Player.sprite.y) {
+					this.sprite.x < Player.sprite.x + 40 && 
+					this.sprite.x + 40 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 &&
+					this.sprite.y  > Player.sprite.y) {
 					
-					Game.PlaySound("branch");
-					this.Sprite.gotoAndPlay("branch");
-					this.Broken = true;
+					Game.playSound("branch");
+					this.sprite.gotoAndPlay("branch");
+					this.broken = true;
 
 					Player.bounce();				
 				}
@@ -210,77 +210,77 @@ var Put={
 			}
 		}
 		
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 		
 		
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		
-		obj.Sprite.gotoAndStop(0);
+		obj.sprite.gotoAndStop(0);
 
 		return obj;
 	},	
 	
 	coin: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/coin.png"],
 			frames: {width:24, height:24}
 		});	
 	
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Glow:Put.particle(x-23, y-15, 255, 185, 100),
-			Expanding:false,
-			Update:function(delta) {
-				if (this.Expanding) {
-					this.Sprite.scaleX += .04;
-					this.Sprite.regX = (this.Sprite.scaleX * 12);
-					if (this.Sprite.scaleX >= 1.0) {
-						this.Expanding = false;
+			sprite:new createjs.Sprite(spriteSheet),
+			glow:Put.particle(x-23, y-15, 255, 185, 100),
+			expanding:false,
+			update:function(delta) {
+				if (this.expanding) {
+					this.sprite.scaleX += .04;
+					this.sprite.regX = (this.sprite.scaleX * 12);
+					if (this.sprite.scaleX >= 1.0) {
+						this.expanding = false;
 					}
 				}
 				else {
-					this.Sprite.scaleX -= .04;
-					this.Sprite.regX = (this.Sprite.scaleX * 12);
-					if (this.Sprite.scaleX <= .1) {
-						this.Expanding = true;
+					this.sprite.scaleX -= .04;
+					this.sprite.regX = (this.sprite.scaleX * 12);
+					if (this.sprite.scaleX <= .1) {
+						this.expanding = true;
 					}
 				}
-				if (this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 12 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
+				if (this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 12 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
 
-					Game.PlaySound("coins");
+					Game.playSound("coins");
 					
 					var text = new createjs.Text("10", "20px InfernoFont", "#f0be00");
-					text.x = this.Sprite.x-6;
-					text.y = this.Sprite.y+12;
+					text.x = this.sprite.x-6;
+					text.y = this.sprite.y+12;
 					text.textBaseline = "alphabetic";
 					text.name = "points";
 
-					Game.Screen.addChild(text);
+					Game.screen.addChild(text);
 
-					Game.Screen.removeChild(this.Sprite);	
-					if (this.Glow) {	 
-						Game.Screen.removeChild(this.Glow.Sprite);
+					Game.screen.removeChild(this.sprite);	
+					if (this.glow) {	 
+						Game.screen.removeChild(this.glow.sprite);
 					}
 
 					Player.score+=10;
-					Game.UpdateScore();
+					Game.updateScore();
 					
 				}
 			}
 		};
 
-		obj.Sprite.gotoAndPlay(0);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.gotoAndPlay(0);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 		
-		Game.Screen.addChild(obj.Sprite);
-		Game.Goal+=10;
+		Game.screen.addChild(obj.sprite);
+		Game.goal+=10;
 		
 		return obj;
 	},	
@@ -289,94 +289,94 @@ var Put={
 	
 	
 	entrance: function(x,y) {
-		var SpriteSheet= new createjs.SpriteSheet({
+		var spriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/exit.png"],
 			frames: {width:60, height:65}
 		});
 		
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
+			sprite:new createjs.Sprite(spriteSheet),
 		};
 	
-		obj.Sprite.gotoAndStop(1);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.gotoAndStop(1);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 	
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},
 	
 	exit: function(x,y) {
-		var SpriteSheet= new createjs.SpriteSheet({
+		var spriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/exit.png"],
 			frames: {width:60, height:65}
 		});
 		
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
-				if(	Player.score >= Game.Goal &&
-					this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 25 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
+				if(	Player.score >= Game.goal &&
+					this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 25 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
 					
-					Game.PlaySound("harp2");
-					Player.score -= Game.Goal;
+					Game.playSound("harp2");
+					Player.score -= Game.goal;
 					// save bonus
 					Player.bonusScore = Player.score;
-					Game.CurrentLevel++;
-					Game.LoadLevel();
+					Game.currentLevel++;
+					Game.loadLevel();
 				}
 			}
 		};
 	
-		obj.Sprite = new createjs.Sprite(SpriteSheet);
-		obj.Sprite.gotoAndStop(0);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite = new createjs.Sprite(spriteSheet);
+		obj.sprite.gotoAndStop(0);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 	
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},
 
 	fist: function(x, y, rl) {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/fist.png"],
 			frames: {width:30, height:30}
 		});	
 		
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			InitX:x,
-			InitY:y,
-			Facing:0,
-			Side:rl,
-			Update:function(delta) {
-				if (this.Side == 'r') {
-					this.Facing += .13;
+			sprite:new createjs.Sprite(spriteSheet),
+			initX:x,
+			initY:y,
+			facing:0,
+			side:rl,
+			update:function(delta) {
+				if (this.side == 'r') {
+					this.facing += .13;
 				}
 				else {
-					this.Facing -= .13;
+					this.facing -= .13;
 				}
 				
 				
-				this.Sprite.x = this.InitX + (Math.cos(this.Facing) * 100);
-				this.Sprite.y = this.InitY + (Math.sin(this.Facing) * 100);
+				this.sprite.x = this.initX + (Math.cos(this.facing) * 100);
+				this.sprite.y = this.initY + (Math.sin(this.facing) * 100);
 				
 				
-				if (this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 15 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
+				if (this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 15 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
 					
 					
-					Game.PlaySound("bounce");
+					Game.playSound("bounce");
 					//console.log("Punched in the face!");
 					
-					if (this.Side == 'r') {
+					if (this.side == 'r') {
 						Player.gPunch = 1000;
 					}
 					else {
@@ -385,111 +385,111 @@ var Put={
 				}
 			}
 		}
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 		if (rl == 'r') {
-			obj.Sprite.gotoAndStop(1);
+			obj.sprite.gotoAndStop(1);
 		}
 		else {
-			obj.Sprite.gotoAndStop(0);
+			obj.sprite.gotoAndStop(0);
 		
 		}
 		
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		
 		return obj;
 	},
 
 	guard: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/head.png"],
 			frames: {width:36, height:33}
 		});	
 	
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Lefty:Put.fist(x-115, y-30, 'l'),
-			Lefty2:Put.fist(x-115, y+30, 'l'),
-			Righty:Put.fist(x+115, y-30, 'r'),
-			Righty2:Put.fist(x+115, y+30, 'r'),
-			Glow:Put.particle(x-20, y-24, 255, 185, 100),
-			Update:function(delta) {
+			sprite:new createjs.Sprite(spriteSheet),
+			lefty:Put.fist(x-115, y-30, 'l'),
+			lefty2:Put.fist(x-115, y+30, 'l'),
+			righty:Put.fist(x+115, y-30, 'r'),
+			righty2:Put.fist(x+115, y+30, 'r'),
+			glow:Put.particle(x-20, y-24, 255, 185, 100),
+			update:function(delta) {
 
-				if (this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 12 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
+				if (this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 12 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
 
 					var text = new createjs.Text("100", "20px InfernoFont", "#f0be00");
-					text.x = this.Sprite.x-6;
-					text.y = this.Sprite.y+12;
+					text.x = this.sprite.x-6;
+					text.y = this.sprite.y+12;
 					text.textBaseline = "alphabetic";
 					text.name = "points";
 					
-					Game.PlaySound("coins");
+					Game.playSound("coins");
 
-					Game.Screen.addChild(text);
+					Game.screen.addChild(text);
 
-					Game.Screen.removeChild(this.Sprite);		 
-					Game.Screen.removeChild(this.Lefty.Sprite);	 
-					Game.Screen.removeChild(this.Righty.Sprite);
-					Game.Screen.removeChild(this.Lefty2.Sprite);	 
-					Game.Screen.removeChild(this.Righty2.Sprite);
+					Game.screen.removeChild(this.sprite);		 
+					Game.screen.removeChild(this.lefty.sprite);	 
+					Game.screen.removeChild(this.righty.sprite);
+					Game.screen.removeChild(this.lefty2.sprite);	 
+					Game.screen.removeChild(this.righty2.sprite);
 					
-					if (this.Glow) {						 
-						Game.Screen.removeChild(this.Glow.Sprite);	
+					if (this.glow) {						 
+						Game.screen.removeChild(this.glow.sprite);	
 					}
 					
-					if (Game.Temple) {
-						Game.Temple.UnlockSlot();
+					if (Game.temple) {
+						Game.temple.unlockSlot();
 					}
 					
 					Player.score+=100;
 					
 					Player.bounce();
 					
-					Game.UpdateScore();
+					Game.updateScore();
 		
 				}
 			}
 		};
-		if (obj.Glow) {
-			obj.Glow.Sprite.scaleX = 1.6;	
-			obj.Glow.Sprite.scaleY = 1.6;
+		if (obj.glow) {
+			obj.glow.sprite.scaleX = 1.6;	
+			obj.glow.sprite.scaleY = 1.6;
 		}
-		obj.Sprite.gotoAndPlay(0);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
-		obj.Righty2.Facing = 1.3;
-		obj.Lefty2.Facing = 1.3;
+		obj.sprite.gotoAndPlay(0);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
+		obj.righty2.facing = 1.3;
+		obj.lefty2.facing = 1.3;
 		
-		Game.Screen.addChild(obj.Sprite);
-		Game.Goal+=100;
+		Game.screen.addChild(obj.sprite);
+		Game.goal+=100;
 		
 		return obj;
 	},
 
 	key: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/key.png"],
 			frames: {width:20, height:47}
 		});	
 	
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Glow:Put.particle(x-15, y-15, 255, 185, 100),
-			Update:function(delta) {
-				if (this.Sprite.x < Player.sprite.x + 50 && 
-					this.Sprite.x + 12 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && 
-					this.Sprite.y  > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			glow:Put.particle(x-15, y-15, 255, 185, 100),
+			update:function(delta) {
+				if (this.sprite.x < Player.sprite.x + 50 && 
+					this.sprite.x + 12 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && 
+					this.sprite.y  > Player.sprite.y) {
 
-					Game.PlaySound("key");
-					Game.Screen.removeChild(this.Sprite);		
-					if (this.Glow) {	 
-						Game.Screen.removeChild(this.Glow.Sprite);
+					Game.playSound("key");
+					Game.screen.removeChild(this.sprite);		
+					if (this.glow) {	 
+						Game.screen.removeChild(this.glow.sprite);
 					}
 					Player.hasKey = true;
 					//$("#key").html("&#9911;");
@@ -498,28 +498,28 @@ var Put={
 			}
 		};
 
-		obj.Sprite.gotoAndPlay(0);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.gotoAndPlay(0);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 		
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 
 		return obj;
 	},
 	
 	ladder: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/ladder.png"]
 			,frames: {width:30, height:60}
 		});
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
-				if (this.Sprite.x+16 < Player.sprite.x + 50 && 
-					this.Sprite.x+16 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 50 && // allow going down
-					this.Sprite.y > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
+				if (this.sprite.x+16 < Player.sprite.x + 50 && 
+					this.sprite.x+16 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 50 && // allow going down
+					this.sprite.y > Player.sprite.y) {
 					if (Game.MOVING_DOWN) {
 						Player.gForce=500;
 					}
@@ -531,39 +531,39 @@ var Put={
 			}
 		}
 		
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 		
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 
 		return obj;
 	},	
 	
 	lava:function(x,y,r,g,b)  {
-		if (!Game.Settings.efx) {
+		if (!Game.settings.efx) {
 			return null;
 		}
 
-		var	SpriteSheet = new createjs.SpriteSheet({
+		var	spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/lava.png"],
 			frames: {width:5, height:100}
 		});
 
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet)
+			sprite:new createjs.Sprite(spriteSheet)
 			// this sparks implementation is just too slow, removing for now
 			,
-			Sparks:[],
-			SparkSheet:new createjs.SpriteSheet({
+			sparks:[],
+			sparkSheet:new createjs.SpriteSheet({
 				images: ["/assets/images/particle.png"],
 				frames: {width:50, height:50}
 			}),
-			Update:function(delta) {
+			update:function(delta) {
 				var spark = null;
 
-				if (Game.Ticks % 30 == 0) {
-					spark = new createjs.Sprite(this.SparkSheet);
+				if (Game.ticks % 30 == 0) {
+					spark = new createjs.Sprite(this.sparkSheet);
 
 					var r = 200;
 					var g = 100;
@@ -573,22 +573,22 @@ var Put={
 					spark.scaleX = .5;
 					spark.scaleY = .5;
 				
-					spark.x=(Game.Width * Math.random() -  Game.Screen.x) / Game.Screen.scaleX;
-					spark.y=(Game.Height - Game.Screen.y) / Game.Screen.scaleY;
+					spark.x=(Game.width * Math.random() -  Game.screen.x) / Game.screen.scaleX;
+					spark.y=(Game.height - Game.screen.y) / Game.screen.scaleY;
 			
 					spark.filters=[new createjs.ColorFilter(1, 1, 1, 1, -(255-r), -(255-g), -(255-b))];
 
 					spark.cache(0,0, 100, 100);
 				
-					Game.Screen.addChild(spark);
-					this.Sparks.push(spark);
+					Game.screen.addChild(spark);
+					this.sparks.push(spark);
 				}
-				for(var i=0; i<this.Sparks.length; i++) {
-					spark = this.Sparks[i];
+				for(var i=0; i<this.sparks.length; i++) {
+					spark = this.sparks[i];
 					spark.alpha -= .005;
 					spark.y-=.7;
 					if (spark.alpha <= 0) {
-						Game.Screen.removeChild(spark);
+						Game.screen.removeChild(spark);
 					}
 				}
 			
@@ -596,235 +596,235 @@ var Put={
 			
 		};
 		
-		obj.Sprite = new createjs.Sprite(SpriteSheet);
-		obj.Sprite.filters=[new createjs.ColorFilter(1, 1, 1, 1, -(255-r), -(255-g), -(255-b))];
-		obj.Sprite.gotoAndPlay(0);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.scaleX=Game.Width/5; //5=width
-		obj.Sprite.cache(0,0, 100, 100);
-		obj.Sprite.UserData = obj;
+		obj.sprite = new createjs.Sprite(spriteSheet);
+		obj.sprite.filters=[new createjs.ColorFilter(1, 1, 1, 1, -(255-r), -(255-g), -(255-b))];
+		obj.sprite.gotoAndPlay(0);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.scaleX=Game.width/5; //5=width
+		obj.sprite.cache(0,0, 100, 100);
+		obj.sprite.UserData = obj;
 
-		Game.Stage.addChild(obj.Sprite);
+		Game.stage.addChild(obj.sprite);
 		return obj;
 	},	
 	particle:function(x,y,r,g,b)  {
-		if (!Game.Settings.efx) {
+		if (!Game.settings.efx) {
 			return null;
 		}
 	
-		var	SpriteSheet = new createjs.SpriteSheet({
+		var	spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/particle.png"],
 			frames: {width:50, height:50}
 		});
 
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet)
+			sprite:new createjs.Sprite(spriteSheet)
 		};
-		obj.Sprite = new createjs.Sprite(SpriteSheet);
-		obj.Sprite.filters=[new createjs.ColorFilter(1, 1, 1, 1, -(255-r), -(255-g), -(255-b))];
-		obj.Sprite.gotoAndPlay(0);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.cache(0,0, 100, 100);
-		obj.Sprite.UserData = obj;
+		//obj.sprite = new createjs.Sprite(spriteSheet);
+		obj.sprite.filters=[new createjs.ColorFilter(1, 1, 1, 1, -(255-r), -(255-g), -(255-b))];
+		obj.sprite.gotoAndPlay(0);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.cache(0,0, 100, 100);
+		obj.sprite.UserData = obj;
 
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},
 	
 	portal:function(x,y,n)  {
-		var	SpriteSheet = new createjs.SpriteSheet({
+		var	spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/portal.png"],
 			frames: {width:120, height:186}
 		});
 
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			LevelTarget:n,
-			Update:function(delta) {
-				if(this.Sprite.x+42 < Player.sprite.x + 50 && 
-					this.Sprite.x+67  > Player.sprite.x && 
-					this.Sprite.y+120 < Player.sprite.y + 50 && 
-					this.Sprite.y+120  > Player.sprite.y) {
-						Game.PlaySound("harp2");
+			sprite:new createjs.Sprite(spriteSheet),
+			levelTarget:n,
+			update:function(delta) {
+				if(this.sprite.x+42 < Player.sprite.x + 50 && 
+					this.sprite.x+67  > Player.sprite.x && 
+					this.sprite.y+120 < Player.sprite.y + 50 && 
+					this.sprite.y+120  > Player.sprite.y) {
+						Game.playSound("harp2");
 						Player.bonusScore = 0;
-						Game.CurrentLevel=this.LevelTarget;
-						Game.LoadLevel();
+						Game.currentLevel=this.LevelTarget;
+						Game.loadLevel();
 				}
 			}
 		};
-		obj.Sprite = new createjs.Sprite(SpriteSheet);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
+		obj.sprite = new createjs.Sprite(spriteSheet);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
 
-		obj.Sprite.UserData = obj;
+		obj.sprite.UserData = obj;
 		
 		var text = new createjs.Text(n, "24px InfernoFont", "#d0ae70");
-		text.x = obj.Sprite.x+54;
-		text.y = obj.Sprite.y+100;
+		text.x = obj.sprite.x+54;
+		text.y = obj.sprite.y+100;
 		text.textBaseline = "alphabetic";
 
-		Game.Screen.addChild(obj.Sprite);
-		Game.Screen.addChild(text);
+		Game.screen.addChild(obj.sprite);
+		Game.screen.addChild(text);
 		
 		
 		return obj;
 	},
 	
 	sky: function(url)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: [url]
 			,frames: {width:2000, height:280}
 		});
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
 
-				this.Sprite.x = -Player.sprite.x/20;
-				this.Sprite.y = -(Game.Ycamera/90);//+200;
+				this.sprite.x = -Player.sprite.x/20;
+				this.sprite.y = -(Game.ycamera/90);//+200;
 			}
 		}
 		
-		obj.Sprite.x=0;
-		obj.Sprite.y=0;
-		obj.Sprite.UserData = obj;
+		obj.sprite.x=0;
+		obj.sprite.y=0;
+		obj.sprite.UserData = obj;
 		
-		Game.Stage.addChild(obj.Sprite);
+		Game.stage.addChild(obj.sprite);
 
 		return obj;
 	},	
 
 	spring: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/spring.png"]
 			,frames: {width:30, height:60}
 		});
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
-				if (this.Sprite.x+16 < Player.sprite.x + 50 && 
-					this.Sprite.x+16 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 100 && // adjust for regY offset
-					this.Sprite.y > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
+				if (this.sprite.x+16 < Player.sprite.x + 50 && 
+					this.sprite.x+16 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 100 && // adjust for regY offset
+					this.sprite.y > Player.sprite.y) {
 					
-					Game.PlaySound("spring");
+					Game.playSound("spring");
 					
 					Player.bounce();
 					Player.gForce = -(Player.bounceVelocity * 2);	
-					this.Sprite.scaleY = .1;
+					this.sprite.scaleY = .1;
 					
 				}
 				
 
-				if (this.Sprite.scaleY < 1.0) {
-					this.Sprite.scaleY += .14;
+				if (this.sprite.scaleY < 1.0) {
+					this.sprite.scaleY += .14;
 				}
 				else {
-					this.Sprite.scaleY = 1;
+					this.sprite.scaleY = 1;
 				}
 			}
 		}
 		
-		obj.Sprite.x=x;
-		obj.Sprite.y=y+30;
-		obj.Sprite.UserData = obj;
-		obj.Sprite.regY = 60;
-		Game.Screen.addChild(obj.Sprite);
+		obj.sprite.x=x;
+		obj.sprite.y=y+30;
+		obj.sprite.UserData = obj;
+		obj.sprite.regY = 60;
+		Game.screen.addChild(obj.sprite);
 
 		return obj;
 	},	
 
 	temple: function(x,y) {
-		var SpriteSheet= new createjs.SpriteSheet({
+		var spriteSheet= new createjs.SpriteSheet({
 			images: ["/assets/images/temple.png"],
 			frames: {width:470, height:280}
 		});
 		
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Slots:[],		
-			Update:function(delta) {
-				for(var i=0; i<this.Slots.length; i++) {
-					if (this.Slots[i].alpha < 1) {
-						this.Slots[i].alpha+= .01;
+			sprite:new createjs.Sprite(spriteSheet),
+			slots:[],		
+			update:function(delta) {
+				for(var i=0; i<this.slots.length; i++) {
+					if (this.slots[i].alpha < 1) {
+						this.slots[i].alpha+= .01;
 					}
 				}
 				
-				if(this.Slots.length == 4 && Player.score >= Game.Goal &&
-					this.Sprite.x+210 < Player.sprite.x + 50 && 
-					this.Sprite.x+210+25  > Player.sprite.x && 
-					this.Sprite.y+200 < Player.sprite.y + 50 && 
-					this.Sprite.y+200 > Player.sprite.y) {
-						Game.Unlock=1;
-						Player.score -= Game.Goal;
-						Game.PlaySound("harp2");
-						Game.CurrentLevel=11;
-						Game.LoadLevel();
+				if(this.slots.length == 4 && Player.score >= Game.goal &&
+					this.sprite.x+210 < Player.sprite.x + 50 && 
+					this.sprite.x+210+25  > Player.sprite.x && 
+					this.sprite.y+200 < Player.sprite.y + 50 && 
+					this.sprite.y+200 > Player.sprite.y) {
+						Game.unlock=1;
+						Player.score -= Game.goal;
+						Game.playSound("harp2");
+						Game.currentLevel=11;
+						Game.loadLevel();
 				}
 				
 			},
-			UnlockSlot:function() {
+			unlockSlot:function() {
 			
-				var SlotSheet = new createjs.SpriteSheet({
+				var slotSheet = new createjs.SpriteSheet({
 					images: ["/assets/images/head.png"],
 					frames: {width:36, height:33}
 				});	
-				var slot = new createjs.Sprite(SlotSheet);
+				var slot = new createjs.Sprite(slotSheet);
 				slot.alpha = 0;
-				switch (this.Slots.length) {
+				switch (this.slots.length) {
 
 					case 0:
-						slot.x = this.Sprite.x+93;
-						slot.y = this.Sprite.y+51+110;
+						slot.x = this.sprite.x+93;
+						slot.y = this.sprite.y+51+110;
 						break;
 					case 1:
-						slot.x = this.Sprite.x+93;
-						slot.y = this.Sprite.y+90+110;
+						slot.x = this.sprite.x+93;
+						slot.y = this.sprite.y+90+110;
 						break;
 					case 2:
-						slot.x = this.Sprite.x+334;
-						slot.y = this.Sprite.y+51+110;
+						slot.x = this.sprite.x+334;
+						slot.y = this.sprite.y+51+110;
 						break;
 					case 3:
-						slot.x = this.Sprite.x+334;
-						slot.y = this.Sprite.y+90+110;
+						slot.x = this.sprite.x+334;
+						slot.y = this.sprite.y+90+110;
 						break;
 				
 				}
-				this.Slots.push(slot);
-				Game.Screen.addChild(slot);
+				this.slots.push(slot);
+				Game.screen.addChild(slot);
 
 
 			}
 		};
 	
-		obj.Sprite = new createjs.Sprite(SpriteSheet);
-		obj.Sprite.gotoAndStop(1);
-		obj.Sprite.x=x;
-		obj.Sprite.y=y;
-		obj.Sprite.UserData = obj;
+		obj.sprite = new createjs.Sprite(spriteSheet);
+		obj.sprite.gotoAndStop(1);
+		obj.sprite.x=x;
+		obj.sprite.y=y;
+		obj.sprite.UserData = obj;
 
 	
-		Game.Screen.addChild(obj.Sprite);
+		Game.screen.addChild(obj.sprite);
 		return obj;
 	},
 
 	turbo: function(x,y)  {
-		var SpriteSheet = new createjs.SpriteSheet({
+		var spriteSheet = new createjs.SpriteSheet({
 			images: ["/assets/images/turbo.png"]
 			,frames: {width:30, height:62}
 		});
 		var obj = {
-			Sprite:new createjs.Sprite(SpriteSheet),
-			Update:function(delta) {
-				if (this.Sprite.x+16 < Player.sprite.x + 50 && 
-					this.Sprite.x+16 > Player.sprite.x && 
-					this.Sprite.y < Player.sprite.y + 100 && // adjust for regY offset
-					this.Sprite.y > Player.sprite.y) {
+			sprite:new createjs.Sprite(spriteSheet),
+			update:function(delta) {
+				if (this.sprite.x+16 < Player.sprite.x + 50 && 
+					this.sprite.x+16 > Player.sprite.x && 
+					this.sprite.y < Player.sprite.y + 100 && // adjust for regY offset
+					this.sprite.y > Player.sprite.y) {
 					
 					
-					Game.PlaySound("turbo");
+					Game.playSound("turbo");
 					
 					
 					Player.bounce();
@@ -834,10 +834,10 @@ var Put={
 			}
 		}
 		
-		obj.Sprite.x=x;
-		obj.Sprite.y=y+30;
-		obj.Sprite.UserData = obj;
-		Game.Screen.addChild(obj.Sprite);
+		obj.sprite.x=x;
+		obj.sprite.y=y+30;
+		obj.sprite.UserData = obj;
+		Game.screen.addChild(obj.sprite);
 
 		return obj;
 	}

@@ -21,7 +21,7 @@ All rights reserved.
 	-->
 	<script type="module" src="/src/inferno.game.js"></script>
 </head>
-<body onload__="Game.Init();">
+<body onload__="Game.init();">
 <div id="header"><a href="http://physle.com/"><img src="/assets/images/logo-100.png" alt="Physle Logo" /></a></div>
 <div id="loading"><img src="/assets/images/loading.gif" /></div>
 <div id="content">
@@ -42,15 +42,15 @@ All rights reserved.
 		<div id="menu-options">
 			<a class="button" href="javascript:void(0);" id="open-main">MAIN MENU</a>
 			<div class="option">
-				<input type="checkbox" id="opt-sound" onchange="Game.UpdateSetting('sound', this.checked)" checked>
+				<input type="checkbox" id="opt-sound" onchange="Game.updateSetting('sound', this.checked)" checked>
 				<label for="opt-sound">SOUND</label>
 			</div>
 			<div class="option">
-				<input type="checkbox" id="opt-music" onchange="Game.UpdateSetting('music', this.checked)" checked>
+				<input type="checkbox" id="opt-music" onchange="Game.updateSetting('music', this.checked)" checked>
 				<label for="opt-music">MUSIC</label>
 			</div>
 			<div class="option">
-				<input type="checkbox" id="opt-effects" onchange="Game.UpdateSetting('efx', this.checked)" checked>
+				<input type="checkbox" id="opt-effects" onchange="Game.updateSetting('efx', this.checked)" checked>
 				<label for="opt-effects">EFFECTS</label>
 			</div>
 		</div>

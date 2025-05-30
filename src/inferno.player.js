@@ -6,9 +6,9 @@ var KEY_LEFT = 37,
 var Player = {
 	score: 0,
 	bonusScore: 0,
-		// must be multiples of Game.Gravity 
-	jumpVelocity: 0,//Game.Gravity * 12,//from 15
-	bounceVelocity: 0,//Game.Gravity * 8,//from 10
+		// must be multiples of Game.gravity 
+	jumpVelocity: 0,//Game.gravity * 12,//from 15
+	bounceVelocity: 0,//Game.gravity * 8,//from 10
 	driftVelocity:260,//from 300
 	gPunch:0,
 	gForce:0,
@@ -40,14 +40,14 @@ var Player = {
 		Player.gPunch = 0;
 		Player.jumps = 2;
 		Player.jumping = false;
-		Game.Screen.addChild(Player.sprite);
-        Player.jumpVelocity= Game.Gravity * 12;//from 15
-	    Player.bounceVelocity= Game.Gravity * 8;//from 10
+		Game.screen.addChild(Player.sprite);
+        Player.jumpVelocity= Game.gravity * 12;//from 15
+	    Player.bounceVelocity= Game.gravity * 8;//from 10
 	},
 	update:function(delta) {
 		Player.sprite.y += delta*Player.gForce;
 		if (Player.gForce < Player.maxG) {
-			Player.gForce += Game.Gravity;
+			Player.gForce += Game.gravity;
 		}
 		
 		Player.sprite.x += delta*Player.gPunch;
@@ -87,7 +87,7 @@ var Player = {
 		Player.gForce = -Player.bounceVelocity;	
 		Player.jumping = false;
 		Player.jumps = 2;
-		Game.Ytarget = -(Player.sprite.y) + Game.Ycamoffset;
+		Game.ytarget = -(Player.sprite.y) + Game.ycamoffset;
 		if (Player.lastMove == KEY_LEFT) {
 			Player.sprite.gotoAndPlay("bounce_l");
 		}
@@ -107,7 +107,7 @@ var Player = {
 			else {
 				Player.sprite.gotoAndPlay("jump_r");
 			}
-			Game.PlaySound("flap");
+			Game.playSound("flap");
 		}	
 	},
 	move:function(direction) {

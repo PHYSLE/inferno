@@ -1,5 +1,6 @@
 /* ---------------------------
 
+
 Copyright © 2007 - 2017 PHYSLE
 All rights reserved.
 
@@ -25,65 +26,65 @@ var KEY_LEFT = 37,
 //http://createjs.com/docs
 
 var Game = {
+	UI:{},
 	MOVING_RIGHT: false, 
 	MOVING_LEFT: false, 
 	MOVING_DOWN: false,
-	CurrentLevel:1,
-	Gravity:50,
-	Paused:true,
-	Goal:0,
-	Stage:null,
-	Screen:null,
-	Screen2:null,
-	Width:1000,
-	Height:600,
-	Ytarget:0,
-	Ycamera:0,
-	Ycamspeed:800,
-	Ycamoffset:420,
-	Yterminate:800, // point where player dies, LoadLevel will figure this out dynamically
-	Level:null,
-	LevelMaps:["100","200","300","400","500","600","700","800","900","1000","portals","secret"],
-	Sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","spring","turbo"],
-	Images:["balloon","bonus","branch","coin","exit","fist","head","key","ladder",
+	currentLevel:1,
+	gravity:50,
+	paused:true,
+	goal:0,
+	stage:null,
+	screen:null,
+	screen2:null,
+	width:1000,
+	height:600,
+	ytarget:0,
+	ycamera:0,
+	ycamspeed:800,
+	ycamoffset:420,
+	yterminate:800, // point where player dies, LoadLevel will figure this out dynamically
+	level:null,
+	levelMaps:["100","200","300","400","500","600","700","800","900","1000","portals","secret"],
+	sounds:["bounce","branch","coins","death","door","flap","harp","harp2","key","spring","turbo"],
+	images:["balloon","bonus","branch","coin","exit","fist","head","key","ladder",
 			"lava","particle","player_r","player_l","portal","spring","temple","turbo",
 			"block1","block2","block3","block4","block5","block6"],
-	Music:{
+	music:{
 		passages:["passage1","passage2","passage3","passage4","passage5"],
 		index:0,
 		sound:null,
 		preloaded:false
 	},
-	Debug:false,
-	MaxDelta:0, // for debugging
-	MinFPS:120, //
-	Ticks:0,
-	Sky:null,
-	Exit:null,
-	Bonus:null,
-	LoadedBonus:false,
-	Temple:null,
-	CookieName:"PslInf",
-	JustRestored:false,
-	Unlock:0,
-	UI:{},
-	Settings:{
+	debug:false,
+	maxDelta:0, // for debugging
+	minFPS:120, //
+	ticks:0,
+	sky:null,
+	exit:null,
+	bonus:null,
+	loadedBonus:false,
+	temple:null,
+	cookieName:"PslInf",
+	justRestored:false,
+	unlock:0,
+	settings:{
 		sound:true,
 		music:true,
 		efx:true
 	},
 	useMusic: false,
 
-	Init: function() {
+	init: function() {
 		// https://stackoverflow.com/questions/44828676/preloadjs-not-working-on-angular-createjs-module
 		window.createjs = createjs;
 		var queue = new createjs.LoadQueue(true);
 		createjs.Sound.alternateExtensions = ['mp3']
 		queue.installPlugin(createjs.Sound);
-		queue.addEventListener('complete', Game.LoadedQueue);
+		queue.addEventListener('complete', Game.loadedQueue);
 		queue.addEventListener('error', function(e) {console.error(e)} );
 		
-		//queue.on("complete", Game.LoadedQueue, this);
+		//queue.on("complete", Game.loadedQueue, this);
 		queue.on("fileload", function(event) {
 			//console.log(event.item);
 			if (event.item.type == "image") {
@@ -97,13 +98,13 @@ var Game = {
 		});
 		
 
-		for (var i=0; i<Game.Sounds.length; i++) {
-			//console.log("loading " + Game.Sounds[i]);
-			//createjs.Sound.registerSound("sounds/"+Game.Sounds[i]+".mp3", Game.Sounds[i]);
+		for (var i=0; i<Game.sounds.length; i++) {
+			//console.log("loading " + Game.sounds[i]);
+			//createjs.Sound.registerSound("sounds/"+Game.sounds[i]+".mp3", Game.sounds[i]);
 			var li = new createjs.LoadItem();
 
-			li.src = "/assets/sounds/"+Game.Sounds[i]+".mp3";
-			li.id = Game.Sounds[i]+".mp3";
+			li.src = "/assets/sounds/"+Game.sounds[i]+".mp3";
+			li.id = Game.sounds[i]+".mp3";
 
 			queue.loadFile(li, false);
 		}
@@ -111,15 +112,15 @@ var Game = {
 			// we will lazy load the remaining passages
 			var li = new createjs.LoadItem();
 			
-			li.src = "/assets/sounds/"+Game.Music.passages[0]+".mp3";
-			li.id = Game.Music.passages[0]+".mp3";
+			li.src = "/assets/sounds/"+Game.music.passages[0]+".mp3";
+			li.id = Game.music.passages[0]+".mp3";
 			queue.loadFile(li, false);
 		}
 		
-		for (var i=1; i<Game.Images.length; i++) {
+		for (var i=1; i<Game.images.length; i++) {
 			var li = new createjs.LoadItem();
-			li.src = "/assets/images/"+Game.Images[i]+".png";
-			li.id = Game.Images[i]+".png";
+			li.src = "/assets/images/"+Game.images[i]+".png";
+			li.id = Game.images[i]+".png";
 
 			queue.loadFile(li, false);	
 		
@@ -163,11 +164,11 @@ var Game = {
 					Player.jump();
 					break;
 				case KEY_ESCAPE: 
-					Game.Pause();
+					Game.pause();
 					break;
 				case KEY_TILDE: 
-					Game.Debug = !Game.Debug;
-					if (Game.Debug) {
+					Game.debug = !Game.debug;
+					if (Game.debug) {
 						$("#debug").style.display('block');
 					}
 					else {
@@ -192,47 +193,48 @@ var Game = {
 		}
 		
 		
-		$('#canvas').width = Game.Width;
-		$('#canvas').height = Game.Height;
+		$('#canvas').width = Game.width;
+		$('#canvas').height = Game.height;
+
 
 		createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
 		createjs.Ticker.setFPS(30);
-		createjs.Ticker.addEventListener("tick", Game.Update);
+		createjs.Ticker.addEventListener("tick", Game.update);
 
 
 	},
 	
-	Pause:function() {
+	pause:function() {
 		// not before a level is loaded
-		if (Game.Level) { 
-			Game.Paused = !Game.Paused;
-			if (!Game.Paused) {
+		if (Game.level) { 
+			Game.paused = !Game.paused;
+			if (!Game.paused) {
 				$("#menu").style.display='none';
-				if (Game.Music.sound) {
-					Game.Music.sound.paused = false;
+				if (Game.music.sound) {
+					Game.music.sound.paused = false;
 				}
 			}
 			else {
 				$("#menu").style.display='block';
-				if (Game.Music.sound) {
-					Game.Music.sound.paused = true;
+				if (Game.music.sound) {
+					Game.music.sound.paused = true;
 				}
 			}
 		}
 
 	},
 	
-	LoadedQueue: function(event) {
-		Game.Stage = new createjs.Stage("canvas");    
-		Game.LoadState();
+	loadedQueue: function(event) {
+		Game.stage = new createjs.Stage("canvas");    
+		Game.loadState();
 		
-		Game.Sky = Put.sky("/assets/images/sky3.png");
-		Game.Stage.update();
+		Game.sky = Put.sky("/assets/images/sky3.png");
+		Game.stage.update();
 		
 		Game.UI.score = $("#score");
 		Game.UI.goal = $("#goal");
 		$('#menu-new').addEventListener("click",function() {
-			Game.Start(); 
+			Game.start(); 
 			$("#menu").style.display='none';
 		});
 		
@@ -241,50 +243,50 @@ var Game = {
 		 
 	},
 	
-	Start: function() {
+	start: function() {
 		Player.score = 0;
 		Player.bonusScore = 0;
-		if (Game.Unlock > 0) {
-			Game.CurrentLevel = 11;
+		if (Game.unlock > 0) {
+			Game.currentLevel = 11;
 		}
 		else {
-			Game.CurrentLevel = 1;
+			Game.currentLevel = 1;
 		}
-		Game.JustRestored = false;
-		Game.LoadLevel();
+		Game.justRestored = false;
+		Game.loadLevel();
 		$("#menu-continue").classList.remove("inactive");
-		$("#menu-continue").addEventListener("click", Game.Resume);
+		$("#menu-continue").addEventListener("click", Game.resume);
 
-		if (Game.Settings.music && Game.useMusic) {
-			if (Game.Music.sound) {
-				Game.Music.sound.stop(); 
+		if (Game.settings.music && Game.useMusic) {
+			if (Game.music.sound) {
+				Game.music.sound.stop(); 
 			}
-			Game.PlayMusic();
+			Game.playMusic();
 		}
 	},
 	
 		
-	Resume: function() {
-		Game.JustRestored = false;
-		Game.Paused = false;
-		if (!Game.Level) {
-			Game.LoadLevel();
+	resume: function() {
+		Game.justRestored = false;
+		Game.paused = false;
+		if (!Game.level) {
+			Game.loadLevel();
 		}
-		if (Game.Settings.music && Game.useMusic) {
-			if (Game.Music.sound) {
-				Game.Music.sound.paused = false; 
+		if (Game.settings.music && Game.useMusic) {
+			if (Game.music.sound) {
+				Game.music.sound.paused = false; 
 			}
 			else {
-				Game.PlayMusic();
+				Game.playMusic();
 			}
 		}
 		$("#menu").style.display = 'none';
 	},
 	
-	LoadState: function() {
+	loadState: function() {
 		// https://developer.mozilla.org/en-US/docs/Web/API/document/cookie
 		var cookieValue = decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + 
-			encodeURIComponent(Game.CookieName).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+			encodeURIComponent(Game.cookieName).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
 
 		if (cookieValue) {	
 			var state = JSON.parse(cookieValue);
@@ -295,43 +297,43 @@ var Game = {
 			Player.score = state.bonus;
 			Player.bonusScore = state.bonus;
 			
-			Game.CurrentLevel = state.level;
-			Game.Unlock = state.unlock;
-			Game.Settings.sound = state.sound;
-			Game.Settings.music = state.music;
-			Game.Settings.efx = state.efx;
+			Game.currentLevel = state.level;
+			Game.unlock = state.unlock;
+			Game.settings.sound = state.sound;
+			Game.settings.music = state.music;
+			Game.settings.efx = state.efx;
 			
 			
 			$("#opt-sound").checked = state.sound;
 			$("#opt-music").checked = state.music;
 			$("#opt-effects").checked = state.efx;
 
-			if (Game.CurrentLevel > 1) {
+			if (Game.currentLevel > 1) {
 				$("#menu-continue").classList.remove("inactive");
-				$("#menu-continue").addEventListener("click", Game.Resume);
+				$("#menu-continue").addEventListener("click", Game.resume);
 			}
 			
 		}		
-		Game.JustRestored = true;		
+		Game.justRestored = true;		
 	},
 	
 	
-	SaveState: function() {	
-		var cookieValue = '{"level":'+Game.CurrentLevel+
+	saveState: function() {	
+		var cookieValue = '{"level":'+Game.currentLevel+
 						',"bonus":'+Player.bonusScore+
-						',"unlock":'+Game.Unlock+
-						',"sound":'+Game.Settings.sound+
-						',"music":'+Game.Settings.music+
-						',"efx":'+Game.Settings.efx+
+						',"unlock":'+Game.unlock+
+						',"sound":'+Game.settings.sound+
+						',"music":'+Game.settings.music+
+						',"efx":'+Game.settings.efx+
 						'}';		
 
-		document.cookie = Game.CookieName + "=" + encodeURIComponent(cookieValue) +"; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+		document.cookie = Game.cookieName + "=" + encodeURIComponent(cookieValue) +"; expires=Fri, 31 Dec 9999 23:59:59 GMT";
 		
 	},
 	
-	LoadLevel: function() {		
-		if (Game.CurrentLevel > Game.LevelMaps.length) {
-			Game.Stage = new createjs.Stage("canvas");  
+	loadLevel: function() {		
+		if (Game.currentLevel > Game.levelMaps.length) {
+			Game.stage = new createjs.Stage("canvas");  
 			var lvlDiv = $('#level');
 			lvlDiv.fadeIn(0);
 			lvlDiv.html("The End");
@@ -341,22 +343,22 @@ var Game = {
 	
 	
 		var dt = Date.now();
-		var map = "/assets/levels/" + Game.LevelMaps[Game.CurrentLevel-1] + ".json?dt=" + dt;
+		var map = "/assets/levels/" + Game.levelMaps[Game.currentLevel-1] + ".json?dt=" + dt;
 		console.log(map);
 
-		Game.Stage = new createjs.Stage("canvas");	
-		Game.Paused = true; // pause until load is complete		
-		Game.Goal = 0;	
+		Game.stage = new createjs.Stage("canvas");	
+		Game.paused = true; // pause until load is complete		
+		Game.goal = 0;	
 
 		fetch(map, {method: 'GET'})
 			.then(function(response) { return response.json(); })
 			.then(function(json) {
-				Game.LoadedLevel(json);
+				Game.loadedLevel(json);
 			});	
 	},
 	
-	LoadedLevel: function(data) {
-		if (!Game.JustRestored && (!Game.Level || Game.Level.name != data.name)) {
+	loadedLevel: function(data) {
+		if (!Game.justRestored && (!Game.level || Game.level.name != data.name)) {
 				
 			var lvlDiv = $('#level');
 			lvlDiv.style.opacity = 1;
@@ -373,97 +375,97 @@ var Game = {
 
 		}
 		
-		Game.Level = data;
-		if (Game.Level.sky) {
-			Game.Sky = Put.sky(Game.Level.sky);
+		Game.level = data;
+		if (Game.level.sky) {
+			Game.sky = Put.sky(Game.level.sky);
 		
 		}
 		/*
-		if (Game.Screen) { // hack to show last level in screen2
-			Game.Screen.removeChild(Player.sprite);	
-			Game.Screen2 = Game.Screen;
-			Game.Screen2.scaleX = .4;
-			Game.Screen2.scaleY = .4;
-			Game.Stage.addChild(Game.Screen2);
+		if (Game.screen) { // hack to show last level in screen2
+			Game.screen.removeChild(Player.sprite);	
+			Game.screen2 = Game.screen;
+			Game.screen2.scaleX = .4;
+			Game.screen2.scaleY = .4;
+			Game.stage.addChild(Game.screen2);
 		}
 		*/
-		Game.Screen = new createjs.Container();
-		Game.Stage.addChild(Game.Screen);
+		Game.screen = new createjs.Container();
+		Game.stage.addChild(Game.screen);
 		
-		if (Game.CurrentLevel >= 9) {
-			Game.Screen.scaleX = .7;
-			Game.Screen.scaleY = .7;
+		if (Game.currentLevel >= 9) {
+			Game.screen.scaleX = .7;
+			Game.screen.scaleY = .7;
 		}
 		
-		Game.LoadedBonus = false;
+		Game.loadedBonus = false;
 		Player.hasKey = false;
 		//Player.hasKey = true; // DEBUG
 		$("#key").innerHTML='';
 		
-		Game.SaveState();
+		Game.saveState();
 		
-		Game.ParseMap(Game.Level.map);		
-		Game.Yterminate += 160;
-		Game.Ytarget = -(Player.sprite.y) + Game.Ycamoffset;
-		Game.Screen.y = -(Player.sprite.y) + Game.Ycamoffset;
+		Game.parseMap(Game.level.map);		
+		Game.yterminate += 160;
+		Game.ytarget = -(Player.sprite.y) + Game.ycamoffset;
+		Game.screen.y = -(Player.sprite.y) + Game.ycamoffset;
 		
-		if (Game.CurrentLevel == 11) {
-			Game.Goal = 300;
+		if (Game.currentLevel == 11) {
+			Game.goal = 300;
 		}
-		Game.UpdateScore();
+		Game.updateScore();
 		
-		if (Game.Level.sky == "/assets/images/sky1.png" || Game.Level.sky == "/assets/images/sky2.png") {
-			Game.Lava = Put.lava(0, 550, 255, 0, 0);
+		if (Game.level.sky == "/assets/images/sky1.png" || Game.level.sky == "/assets/images/sky2.png") {
+			Game.lava = Put.lava(0, 550, 255, 0, 0);
 		}
 		else {
-			Game.Lava = Put.lava(0, 550, 255, 180, 0);
+			Game.lava = Put.lava(0, 550, 255, 180, 0);
 		}
 		
-		if (!Game.JustRestored) {
-			Game.Paused = false;
+		if (!Game.justRestored) {
+			Game.paused = false;
 		}
 
 	},
 	
 	
-	LoadBonus:function() {
+	loadBonus:function() {
 		// move last screen to 2
-		Game.Screen.removeChild(Player.sprite);	
-		Game.Screen2 = Game.Screen;	
+		Game.screen.removeChild(Player.sprite);	
+		Game.screen2 = Game.screen;	
 		
 		// load bonus on main screen
-		Game.Screen = new createjs.Container();
-		Game.Screen.scaleX = .5;
-		Game.Screen.scaleY = .5;
-		Game.Stage.addChild(Game.Screen);	
-		Game.Stage.addChild(Game.Screen2);
+		Game.screen = new createjs.Container();
+		Game.screen.scaleX = .5;
+		Game.screen.scaleY = .5;
+		Game.stage.addChild(Game.screen);	
+		Game.stage.addChild(Game.screen2);
 		
-		var goal = Game.Goal;
+		var goal = Game.goal;
 		
-		Game.ParseMap(Game.Level.bonus);	
+		Game.parseMap(Game.level.bonus);	
 		
 		// bonus points don't change goal
-		Game.Goal = goal;
+		Game.goal = goal;
 
 	},
 	
 	
-	ExitBonus:function() {
+	exitBonus:function() {
 		// swap the screens except for the player		
-		Game.Screen.removeChild(Player.sprite);		
-		Game.Screen2.addChild(Player.sprite);
+		Game.screen.removeChild(Player.sprite);		
+		Game.screen2.addChild(Player.sprite);
 		
-		var temp = Game.Screen;
+		var temp = Game.screen;
 
-		Game.Screen = Game.Screen2 ;
-		Game.Screen2 = temp;	
+		Game.screen = Game.screen2 ;
+		Game.screen2 = temp;	
 
-		Player.sprite.x = Game.Bonus.Sprite.x;
-		Player.sprite.y = Game.Bonus.Sprite.y;
+		Player.sprite.x = Game.bonus.sprite.x;
+		Player.sprite.y = Game.bonus.sprite.y;
 	
 	},
 	
-	ParseMap:function(map) {
+	parseMap:function(map) {
 	
 		var px,py;
 	
@@ -502,13 +504,13 @@ var Game = {
 					Put.key(gameX,gameY);
 				}
 				else if (current == "b") {
-					Game.Bonus = Put.bonus(gameX,gameY);
+					Game.bonus = Put.bonus(gameX,gameY);
 				}
 				else if (current == "e") {
 					Put.bonusExit(gameX,gameY);
 				}
 				else if (current == "n") {
-					Game.Exit = Put.exit(gameX,gameY);
+					Game.exit = Put.exit(gameX,gameY);
 				}
 				else if (current == "m") {
 					Put.entrance(gameX,gameY);
@@ -517,7 +519,7 @@ var Game = {
 					Put.guard(gameX,gameY);
 				}
 				else if (current == "t") {
-					Game.Temple = Put.temple(gameX,gameY);
+					Game.temple = Put.temple(gameX,gameY);
 				}
 				else if (/^\d$/.test(current)) {
 					Put.portal(gameX,gameY,current);
@@ -537,29 +539,29 @@ var Game = {
 					var b = Put.block(gameX,gameY,n);
 
 					if (current == "v") {
-						b.Waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY+300}];
+						b.waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY+300}];
 					} 
 					else if (current == "^") {
-						b.Waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY-300}];				
+						b.waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY-300}];				
 					}
 					else if (current == "<") {
-						b.Waypoints=[{x:gameX,y:gameY},{x:gameX-400,y:gameY}];				
+						b.waypoints=[{x:gameX,y:gameY},{x:gameX-400,y:gameY}];				
 					}
 					else if (current==">") {
-						b.Waypoints=[{x:gameX,y:gameY},{x:gameX+400,y:gameY}];	
+						b.waypoints=[{x:gameX,y:gameY},{x:gameX+400,y:gameY}];	
 					}
 					else if (current=="L") {
-						b.Waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY-300},{x:gameX,y:gameY},{x:gameX+400,y:gameY}];	
+						b.waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY-300},{x:gameX,y:gameY},{x:gameX+400,y:gameY}];	
 					}
 					else if (current=="T") {
-						b.Waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY+300},{x:gameX,y:gameY},{x:gameX-400,y:gameY}];	
+						b.waypoints=[{x:gameX,y:gameY},{x:gameX,y:gameY+300},{x:gameX,y:gameY},{x:gameX-400,y:gameY}];	
 					
 					}
 				
 				}
 				
-				if (gameY > Game.Yterminate) {
-					Game.Yterminate = gameY; 
+				if (gameY > Game.yterminate) {
+					Game.yterminate = gameY; 
 				}
 				
 			}
@@ -571,100 +573,101 @@ var Game = {
 	
 	},
 	
-	PlaySound:function(sound) {
-		if (Game.Settings.sound) {
+	playSound:function(sound) {
+		if (Game.settings.sound) {
 			createjs.Sound.play(sound + ".mp3");
 		}
 	},
 	
-	PlayMusic:function() {
-		Game.Music.sound = createjs.Sound.play(Game.Music.passages[Game.Music.index]  + ".mp3");	
+	playMusic:function() {
+		Game.music.sound = createjs.Sound.play(Game.music.passages[Game.music.index]  + ".mp3");	
 
-		if (Game.Music.index + 1 < Game.Music.passages.length && !Game.Music.preloaded) {
-			var psg = Game.Music.passages[Game.Music.index + 1];
+		if (Game.music.index + 1 < Game.music.passages.length && !Game.music.preloaded) {
+			var psg = Game.music.passages[Game.music.index + 1];
 			createjs.Sound.registerSound("/assets/sounds/"+psg+".mp3", psg+".mp3");
 		}
 
 		
-		Game.Music.sound.on("complete",function() {
+		Game.music.sound.on("complete",function() {
 
-			Game.Music.index++;
-			if (Game.Music.index == Game.Music.passages.length) {
-				Game.Music.index = 0;
-				Game.Music.preloaded = true;
+			Game.music.index++;
+			if (Game.music.index == Game.music.passages.length) {
+				Game.music.index = 0;
+				Game.music.preloaded = true;
 			}
 
-			Game.PlayMusic() ;
+			Game.playMusic() ;
 		});
 	},
 	
-	UpdateSetting:function(setting, state) {
+	updateSetting:function(setting, state) {
 		switch(setting) {
 			case "music":
-				if (Game.Music.sound && !state) {
-					Game.Music.sound.stop();
-					Game.Music.sound = null;
+				if (Game.music.sound && !state) {
+					Game.music.sound.stop();
+					Game.music.sound = null;
 				}
 				else {
-					Game.PlayMusic();	
-					Game.Music.sound.paused = true;
+					Game.playMusic();	
+					Game.music.sound.paused = true;
 				}
-				Game.Settings.music = state;
+				Game.settings.music = state;
 				break;
 			case "sound":
-				Game.Settings.sound = state;
+				Game.settings.sound = state;
 				break;
 			case "efx":
-				Game.Settings.efx = state;
+				Game.settings.efx = state;
 				break;
 		}
 		
 		
-		Game.SaveState();
+		Game.saveState();
 		
 	},
 	
-	UpdateScore:function() {		
+	updateScore:function() {		
 		Game.UI.score.innerHTML=Player.score
-		Game.UI.goal.innerHTML = Game.Goal;
-		if (Player.score < Game.Goal) {
+		Game.UI.goal.innerHTML = Game.goal;
+		if (Player.score < Game.goal) {
 			Game.UI.goal.style.color= "red";
 		}
-		else if (Player.score == Game.Goal) {
+		else if (Player.score == Game.goal) {
 			Game.UI.goal.style.color= "white";
 			console.log("Game.UI.goal.style.color=" + Game.UI.goal.style.color)
-			if (Game.Exit) Game.Exit.Sprite.gotoAndStop(1);
+			if (Game.exit) Game.exit.sprite.gotoAndStop(1);
 			
-			Game.PlaySound("door");
+			Game.playSound("door");
 		}
 	},
 	
-	Update:function(event) {
+	update:function(event) {
 
 		var delta = event.delta/1000;
-		Game.Ticks++;
+		Game.ticks++;
+
 	
-		if (Game.Debug) {
+		if (Game.debug) {/*
 			var fps = createjs.Ticker.getMeasuredFPS().toFixed(1);
-			if (fps < Game.MinFPS) {
-				Game.MinFPS = fps;
+			if (fps < Game.minFPS) {
+				Game.minFPS = fps;
 			}
 		
-			if (delta > Game.MaxDelta) {
-				Game.MaxDelta = delta;
+			if (delta > Game.maxDelta) {
+				Game.maxDelta = delta;
 			}	
-		/*
+		
 			$("#debug").html("FPS: "+fps
-				+"<br />Min FPS: "+ Game.MinFPS
+				+"<br />Min FPS: "+ Game.minFPS
 				+"<br />Delta: "+delta.toFixed(3) 
-				+"<br />Max Delta: "+ Game.MaxDelta.toFixed(3) 
+				+"<br />Max Delta: "+ Game.maxDelta.toFixed(3) 
 				+"<br />Player: " + Player.sprite.x.toFixed(1) +"," + Player.sprite.y.toFixed(1)
-				+"<br />Screen: " + Game.Screen.x.toFixed(1) +"," + Game.Screen.y.toFixed(1) 
-				+"<br />Objects: "+Game.Screen.children.length);
+				+"<br />Screen: " + Game.screen.x.toFixed(1) +"," + Game.screen.y.toFixed(1) 
+				+"<br />Objects: "+Game.screen.children.length);
 			*/
 		}
-	
-		if (Game.Paused) {
+
+		if (Game.paused) {
 			return;
 		}
 	
@@ -673,72 +676,72 @@ var Game = {
 		}
 		Player.update(delta);
 		
-		Game.Sky.Update(delta);
+		Game.sky.update(delta);
 
-		if (Game.Settings.efx && Game.Lava) {
-			Game.Lava.Update(delta);
+		if (Game.settings.efx && Game.lava) {
+			Game.lava.update(delta);
 		}
 		
-		for(var i=0; i<Game.Screen.children.length; i++) {
-			var obj = Game.Screen.children[i];
-			if(obj.UserData && typeof obj.UserData.Update === "function") {
-				obj.UserData.Update(delta);
+		for(var i=0; i<Game.screen.children.length; i++) {
+			var obj = Game.screen.children[i];
+			if(obj.UserData && typeof obj.UserData.update === "function") {
+				obj.UserData.update(delta);
 			}
 			else if (obj.name == "points") {
 				obj.y -= delta*50;
 				obj.alpha -= .02;
-				if (obj.alpha <= 0) Game.Screen.removeChild(obj);			
+				if (obj.alpha <= 0) Game.screen.removeChild(obj);			
 			}
 
 		} 
 		
-		if (Game.Screen2) {
-			Game.Screen2.x = -Player.sprite.x.toFixed(0)  * Game.Screen2.scaleY + Game.Width/2  ;
+		if (Game.screen2) {
+			Game.screen2.x = -Player.sprite.x.toFixed(0)  * Game.screen2.scaleY + Game.width/2  ;
 		}
 		
-		Game.Screen.x = -Player.sprite.x.toFixed(0)  * Game.Screen.scaleY + Game.Width/2  ;
+		Game.screen.x = -Player.sprite.x.toFixed(0)  * Game.screen.scaleY + Game.width/2  ;
 		// 50 worked without jitters
-		if (Math.abs(Game.Screen.y - Game.Ytarget * Game.Screen.scaleY) > Game.Ycamspeed/50) {
-			if (Game.Screen.y > Game.Ytarget * Game.Screen.scaleY) {
-				Game.Screen.y -= (delta*Game.Ycamspeed) * Game.Screen.scaleY;
+		if (Math.abs(Game.screen.y - Game.ytarget * Game.screen.scaleY) > Game.ycamspeed/50) {
+			if (Game.screen.y > Game.ytarget * Game.screen.scaleY) {
+				Game.screen.y -= (delta*Game.ycamspeed) * Game.screen.scaleY;
 			}
 			else {
-				Game.Screen.y += (delta*Game.Ycamspeed) * Game.Screen.scaleY;
+				Game.screen.y += (delta*Game.ycamspeed) * Game.screen.scaleY;
 			
 			}
 		
 		}
 		else {
-			Game.Screen.y = (Game.Ytarget * Game.Screen.scaleY);		
+			Game.screen.y = (Game.ytarget * Game.screen.scaleY);		
 		}
 		
 		// don't let player out of screen
-		if (-Game.Screen.y > Player.sprite.y * Game.Screen.scaleY) {
+		if (-Game.screen.y > Player.sprite.y * Game.screen.scaleY) {
 
-			Game.Screen.y = -Player.sprite.y * Game.Screen.scaleY;
+			Game.screen.y = -Player.sprite.y * Game.screen.scaleY;
 		}
-		else if (-(Game.Screen.y - (Game.Height - 50)) < Player.sprite.y * Game.Screen.scaleY) { 
-			Game.Screen.y = -Player.sprite.y * Game.Screen.scaleY + (Game.Height - 50); // 25 = 1/2 player
+		else if (-(Game.screen.y - (Game.height - 50)) < Player.sprite.y * Game.screen.scaleY) { 
+			Game.screen.y = -Player.sprite.y * Game.screen.scaleY + (Game.height - 50); // 25 = 1/2 player
 	
 		}
 		
 		
-		if (Player.sprite.y > Game.Yterminate) {
+		if (Player.sprite.y > Game.yterminate) {
 			// dead
 			
-			Game.PlaySound("death");
+			Game.playSound("death");
 			Player.score = Player.bonusScore;
-			Game.LoadLevel();
+			Game.loadLevel();
 		}
 		
-		Game.Stage.update();
+		Game.stage.update();
 
 	}
 }
 
 
 window.addEventListener('load', function() {
-	Game.Init();
+	Game.init();
 	$('#open-options').addEventListener('click',function() {
 		$('#menu-main').style.display='none';
 		$('#menu-options').style.display='block';
