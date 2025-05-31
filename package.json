@@ -1,8 +1,8 @@
 {
   "name": "inferno",
   "version": "2.0.0",
-  "description": "A javascript port of Inferno originally written in 2007.\r This codebase depends on jQuery and create.js.",
-  "main": "inferno.factory.js",
+  "description": "A javascript port of Inferno originally written in 2007.\r This codebase depends on vite and create.js.",
+  "main": "inferno.game.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

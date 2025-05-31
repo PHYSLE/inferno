@@ -107,7 +107,7 @@ div.option {
 	height:30px;
 	margin: 0px auto;
 	text-align:left;
-	width:100px;
+	width:120px;
 }
 
 div.option input {
@@ -119,7 +119,7 @@ div.option input {
 	margin: 0px auto;
 	padding:30px;
 	width:160px;
-	height:200px;
+	height:220px;
 	background-color:rgba(70, 70, 70, 0.5); 
 	border:1px rgba(255, 255, 255, 0.5) solid;
 	position:absolute;
@@ -138,6 +138,29 @@ div.option input {
 #menu-options, #menu-scores {
 	display:none;
 }
+
+#touch-controls {
+	display:none;
+}
+
+.control {
+  position: absolute;
+  bottom: 100px;
+  z-index:9999;
+  height: 32px;
+  width: 32px;
+  border-radius: 52px;
+  margin-top:16px;
+  margin-right:10px;
+  border: 2px solid #FFF;
+  display:block;
+  color:#FFF;
+  text-decoration:none;
+  text-align: center;
+  font-size:24px; /*28px*/
+  font-family: monospace;
+}
+
 /*
 table.scores {
 	width:100px;

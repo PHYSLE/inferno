@@ -70,10 +70,10 @@ var Game = {
 	unlock:0,
 	settings:{
 		sound:true,
-		music:true,
-		efx:true
+		music:false,
+		efx:true,
+		touch:false
 	},
-	useMusic: false,
 
 	init: function() {
 		// https://stackoverflow.com/questions/44828676/preloadjs-not-working-on-angular-createjs-module
@@ -100,7 +100,7 @@ var Game = {
 
 		for (var i=0; i<Game.sounds.length; i++) {
 			//console.log("loading " + Game.sounds[i]);
-			//createjs.Sound.registerSound("sounds/"+Game.sounds[i]+".mp3", Game.sounds[i]);
+			createjs.Sound.registerSound("/assets/sounds/"+Game.sounds[i]+".mp3", Game.sounds[i]);
 			var li = new createjs.LoadItem();
 
 			li.src = "/assets/sounds/"+Game.sounds[i]+".mp3";
@@ -108,7 +108,7 @@ var Game = {
 
 			queue.loadFile(li, false);
 		}
-		if (Game.useMusic) {
+		if (Game.settings.music) {
 			// we will lazy load the remaining passages
 			var li = new createjs.LoadItem();
 			
@@ -135,8 +135,11 @@ var Game = {
 		
 		}
 
+		if (true) {
+
+		}
 	   
-		queue.load(); // handled by LoadedQueue
+		queue.load(); // handled by loadedQueue
 	
 		document.onkeydown = function (event) {
 			switch(event.keyCode) {
@@ -222,6 +225,8 @@ var Game = {
 			}
 		}
 
+		$('#touch-controls').style.display = 'none'
+			
 	},
 	
 	loadedQueue: function(event) {
@@ -257,11 +262,17 @@ var Game = {
 		$("#menu-continue").classList.remove("inactive");
 		$("#menu-continue").addEventListener("click", Game.resume);
 
-		if (Game.settings.music && Game.useMusic) {
+		if (Game.settings.music) {
 			if (Game.music.sound) {
 				Game.music.sound.stop(); 
 			}
 			Game.playMusic();
+		}
+		if(Game.settings.touch) {
+			$('#touch-controls').style.display = 'block'
+		}
+		else {
+			$('#touch-controls').style.display = 'none'
 		}
 	},
 	
@@ -272,7 +283,7 @@ var Game = {
 		if (!Game.level) {
 			Game.loadLevel();
 		}
-		if (Game.settings.music && Game.useMusic) {
+		if (Game.settings.music) {
 			if (Game.music.sound) {
 				Game.music.sound.paused = false; 
 			}
@@ -281,6 +292,12 @@ var Game = {
 			}
 		}
 		$("#menu").style.display = 'none';
+		if(Game.settings.touch) {
+			$('#touch-controls').style.display = 'block'
+		}
+		else {
+			$('#touch-controls').style.display = 'none'
+		}
 	},
 	
 	loadState: function() {
@@ -293,7 +310,7 @@ var Game = {
 		
 			//state.level=12;
 		
-			//console.log(cookieValue);		
+			console.log(cookieValue);		
 			Player.score = state.bonus;
 			Player.bonusScore = state.bonus;
 			
@@ -302,11 +319,14 @@ var Game = {
 			Game.settings.sound = state.sound;
 			Game.settings.music = state.music;
 			Game.settings.efx = state.efx;
+			Game.settings.touch = state.touch;
 			
 			
 			$("#opt-sound").checked = state.sound;
 			$("#opt-music").checked = state.music;
 			$("#opt-effects").checked = state.efx;
+			$("#opt-touch").checked = state.touch;
+
 
 			if (Game.currentLevel > 1) {
 				$("#menu-continue").classList.remove("inactive");
@@ -325,6 +345,7 @@ var Game = {
 						',"sound":'+Game.settings.sound+
 						',"music":'+Game.settings.music+
 						',"efx":'+Game.settings.efx+
+						',"touch":'+Game.settings.touch+
 						'}';		
 
 		document.cookie = Game.cookieName + "=" + encodeURIComponent(cookieValue) +"; expires=Fri, 31 Dec 9999 23:59:59 GMT";
@@ -366,13 +387,13 @@ var Game = {
 			lvlDiv.style.transition = '5.0s';
 			lvlDiv.style.opacity = 0;
 
-			
+			/*
 			var hintDiv = $('#hint');
 			hintDiv.style.opacity = 1;
 			hintDiv.innerHTML=data.hint;
 			hintDiv.style.transition = '5.0s';
 			hintDiv.style.opacity = 0;
-
+			*/
 		}
 		
 		Game.level = data;
@@ -603,6 +624,8 @@ var Game = {
 	updateSetting:function(setting, state) {
 		switch(setting) {
 			case "music":
+				Game.settings.music = state;
+				/*
 				if (Game.music.sound && !state) {
 					Game.music.sound.stop();
 					Game.music.sound = null;
@@ -610,8 +633,9 @@ var Game = {
 				else {
 					Game.playMusic();	
 					Game.music.sound.paused = true;
-				}
-				Game.settings.music = state;
+				}*/
+				// just reload
+				location = 'index.html'
 				break;
 			case "sound":
 				Game.settings.sound = state;
@@ -619,6 +643,16 @@ var Game = {
 			case "efx":
 				Game.settings.efx = state;
 				break;
+			case "touch":
+				Game.settings.touch = state;
+				if (state) {
+					$('#touch-controls').style.display = 'block'
+				}
+				else {
+					$('#touch-controls').style.display = 'none'
+				}
+				break;
+
 		}
 		
 		
@@ -749,6 +783,58 @@ window.addEventListener('load', function() {
 	$('#open-main').addEventListener('click',function() {
 		$('#menu-main').style.display='block';
 		$('#menu-options').style.display='none';
+	});
+	var cleft = $('#control-left'), 
+		cright = $('#control-right'), 
+		cdown = $('#control-down'),
+		cup = $('#control-up')
+	cup.addEventListener('touchstart', function() {
+		Player.jump();
+	});
+	cleft.addEventListener('touchstart', function() {
+		if (!Game.MOVING_LEFT) {
+			Player.move(KEY_LEFT);
+		}
+		Game.MOVING_LEFT = true;		
+	});
+	cleft.addEventListener('touchend', function() {
+		Game.MOVING_LEFT = false;
+	});
+	cright.addEventListener('touchstart', function() {
+		if (!Game.MOVING_RIGHT) {
+			Player.move(KEY_RIGHT);
+		}
+		Game.MOVING_RIGHT = true;		
+	});
+	cright.addEventListener('touchend', function() {
+		Game.MOVING_RIGHT = false;
+	});
+	cdown.addEventListener('touchstart', function() {
+		Game.MOVING_DOWN= true;		
+	});
+	cdown.addEventListener('touchend', function() {
+		Game.MOVING_DOWN = false;
+	});
+
+	//options	
+	$('#opt-sound').checked = Game.settings.sound;
+	$('#opt-sound').addEventListener('change',function(event) {
+		Game.updateSetting('sound', this.checked)
+	});
+
+	$('#opt-music').checked = Game.settings.music;
+	$('#opt-music').addEventListener('change',function(event) {
+		Game.updateSetting('music', this.checked)
+	});
+
+	$('#opt-touch').checked = Game.settings.touch;
+	$('#opt-touch').addEventListener('change',function(event) {
+		Game.updateSetting('touch', this.checked)
+	});
+
+	$('#opt-effects').checked = Game.settings.efx;
+	$('#opt-effects').addEventListener('efx',function(event) {
+		Game.updateSetting('efx', this.checked)
 	});
 })
 
