@@ -19,7 +19,7 @@ var Player = {
 	maxG:1800,
 	hasKey:false,
 	spriteSheet:new createjs.SpriteSheet({
-		images: ["/assets/images/player_r.png","/assets/images/player_l.png"],
+		images: ["assets/images/player_r.png","assets/images/player_l.png"],
 		frames: {width:50, height:75},
 		animations: {
 			jump_r:{frames:[0,5], next: false ,speed: 0.6},

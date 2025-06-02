@@ -38,7 +38,7 @@ var Game = {
 	screen:null,
 	screen2:null,
 	width:1000,
-	height:600,
+	height:500,
 	ytarget:0,
 	ycamera:0,
 	ycamspeed:800,
@@ -100,10 +100,10 @@ var Game = {
 
 		for (var i=0; i<Game.sounds.length; i++) {
 			//console.log("loading " + Game.sounds[i]);
-			createjs.Sound.registerSound("/assets/sounds/"+Game.sounds[i]+".mp3", Game.sounds[i]);
+			createjs.Sound.registerSound("assets/sounds/"+Game.sounds[i]+".mp3", Game.sounds[i]);
 			var li = new createjs.LoadItem();
 
-			li.src = "/assets/sounds/"+Game.sounds[i]+".mp3";
+			li.src = "assets/sounds/"+Game.sounds[i]+".mp3";
 			li.id = Game.sounds[i]+".mp3";
 
 			queue.loadFile(li, false);
@@ -112,14 +112,14 @@ var Game = {
 			// we will lazy load the remaining passages
 			var li = new createjs.LoadItem();
 			
-			li.src = "/assets/sounds/"+Game.music.passages[0]+".mp3";
+			li.src = "assets/sounds/"+Game.music.passages[0]+".mp3";
 			li.id = Game.music.passages[0]+".mp3";
 			queue.loadFile(li, false);
 		}
 		
 		for (var i=1; i<Game.images.length; i++) {
 			var li = new createjs.LoadItem();
-			li.src = "/assets/images/"+Game.images[i]+".png";
+			li.src = "assets/images/"+Game.images[i]+".png";
 			li.id = Game.images[i]+".png";
 
 			queue.loadFile(li, false);	
@@ -128,15 +128,11 @@ var Game = {
 		
 		for (var i=1; i<5; i++) {
 			var li = new createjs.LoadItem();
-			li.src = "/assets/images/sky"+i+".png";
+			li.src = "assets/images/sky"+i+".png";
 			li.id = "sky"+i+".png";
 
 			queue.loadFile(li, false);	
 		
-		}
-
-		if (true) {
-
 		}
 	   
 		queue.load(); // handled by loadedQueue
@@ -233,7 +229,7 @@ var Game = {
 		Game.stage = new createjs.Stage("canvas");    
 		Game.loadState();
 		
-		Game.sky = Put.sky("/assets/images/sky3.png");
+		Game.sky = Put.sky("assets/images/sky3.png");
 		Game.stage.update();
 		
 		Game.UI.score = $("#score");
@@ -364,7 +360,7 @@ var Game = {
 	
 	
 		var dt = Date.now();
-		var map = "/assets/levels/" + Game.levelMaps[Game.currentLevel-1] + ".json?dt=" + dt;
+		var map = "assets/levels/" + Game.levelMaps[Game.currentLevel-1] + ".json?dt=" + dt;
 		console.log(map);
 
 		Game.stage = new createjs.Stage("canvas");	
@@ -398,7 +394,7 @@ var Game = {
 		
 		Game.level = data;
 		if (Game.level.sky) {
-			Game.sky = Put.sky(Game.level.sky);
+			Game.sky = Put.sky('assets/' + Game.level.sky);
 		
 		}
 		/*
@@ -413,10 +409,10 @@ var Game = {
 		Game.screen = new createjs.Container();
 		Game.stage.addChild(Game.screen);
 		
-		if (Game.currentLevel >= 9) {
+		//if (Game.currentLevel >= 9) {
 			Game.screen.scaleX = .7;
 			Game.screen.scaleY = .7;
-		}
+		//}
 		
 		Game.loadedBonus = false;
 		Player.hasKey = false;
@@ -435,7 +431,7 @@ var Game = {
 		}
 		Game.updateScore();
 		
-		if (Game.level.sky == "/assets/images/sky1.png" || Game.level.sky == "/assets/images/sky2.png") {
+		if (Game.level.sky == "assets/images/sky1.png" || Game.level.sky == "assets/images/sky2.png") {
 			Game.lava = Put.lava(0, 550, 255, 0, 0);
 		}
 		else {
@@ -605,7 +601,7 @@ var Game = {
 
 		if (Game.music.index + 1 < Game.music.passages.length && !Game.music.preloaded) {
 			var psg = Game.music.passages[Game.music.index + 1];
-			createjs.Sound.registerSound("/assets/sounds/"+psg+".mp3", psg+".mp3");
+			createjs.Sound.registerSound("assets/sounds/"+psg+".mp3", psg+".mp3");
 		}
 
 		
@@ -635,7 +631,9 @@ var Game = {
 					Game.music.sound.paused = true;
 				}*/
 				// just reload
+				Game.saveState();
 				location = 'index.html'
+				return;
 				break;
 			case "sound":
 				Game.settings.sound = state;
@@ -784,6 +782,8 @@ window.addEventListener('load', function() {
 		$('#menu-main').style.display='block';
 		$('#menu-options').style.display='none';
 	});
+
+	// touch controls
 	var cleft = $('#control-left'), 
 		cright = $('#control-right'), 
 		cdown = $('#control-down'),
@@ -815,6 +815,7 @@ window.addEventListener('load', function() {
 	cdown.addEventListener('touchend', function() {
 		Game.MOVING_DOWN = false;
 	});
+
 
 	//options	
 	$('#opt-sound').checked = Game.settings.sound;

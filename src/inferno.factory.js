@@ -11,7 +11,7 @@ import Player from '/src/inferno.player.js';
 var Put={
 	balloon: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/balloon.png"]
+			images: ["assets/images/balloon.png"]
 			,frames: {width:30, height:40}
 		});
 		var obj = {
@@ -49,7 +49,7 @@ var Put={
 	
 	bonus: function(x,y) {
 		var spriteSheet= new createjs.SpriteSheet({
-			images: ["/assets/images/bonus.png"],
+			images: ["assets/images/bonus.png"],
 			frames: {width:60, height:65}
 		});
 		
@@ -84,7 +84,7 @@ var Put={
 
 	bonusExit: function(x,y) {
 		var spriteSheet= new createjs.SpriteSheet({
-			images: ["/assets/images/bonus.png"],
+			images: ["assets/images/bonus.png"],
 			frames: {width:60, height:65}
 		});
 		
@@ -116,7 +116,7 @@ var Put={
 
 	block: function(x,y,i)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/block" + i + ".png"],
+			images: ["assets/images/block" + i + ".png"],
 			frames: {width:30 * i, height:30}
 		});
 		
@@ -175,7 +175,7 @@ var Put={
 
 	branch: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/branch.png"],
+			images: ["assets/images/branch.png"],
 			frames: {width:60, height:60},
 			animations: {break:{frames:[1,2,3,4,5], next: false, speed:.8 }}
 		});
@@ -224,7 +224,7 @@ var Put={
 	
 	coin: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/coin.png"],
+			images: ["assets/images/coin.png"],
 			frames: {width:24, height:24}
 		});	
 	
@@ -290,7 +290,7 @@ var Put={
 	
 	entrance: function(x,y) {
 		var spriteSheet= new createjs.SpriteSheet({
-			images: ["/assets/images/exit.png"],
+			images: ["assets/images/exit.png"],
 			frames: {width:60, height:65}
 		});
 		
@@ -309,7 +309,7 @@ var Put={
 	
 	exit: function(x,y) {
 		var spriteSheet= new createjs.SpriteSheet({
-			images: ["/assets/images/exit.png"],
+			images: ["assets/images/exit.png"],
 			frames: {width:60, height:65}
 		});
 		
@@ -343,7 +343,7 @@ var Put={
 
 	fist: function(x, y, rl) {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/fist.png"],
+			images: ["assets/images/fist.png"],
 			frames: {width:30, height:30}
 		});	
 		
@@ -402,7 +402,7 @@ var Put={
 
 	guard: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/head.png"],
+			images: ["assets/images/head.png"],
 			frames: {width:36, height:33}
 		});	
 	
@@ -472,7 +472,7 @@ var Put={
 
 	key: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/key.png"],
+			images: ["assets/images/key.png"],
 			frames: {width:20, height:47}
 		});	
 	
@@ -492,7 +492,7 @@ var Put={
 					}
 					Player.hasKey = true;
 					//$("#key").html("&#9911;");
-					document.getElementById('key').innerHTML='<img src="/assets/images/icon-key.png" />';
+					document.getElementById('key').innerHTML='<img src="assets/images/icon-key.png" />';
 				}
 			}
 		};
@@ -509,7 +509,7 @@ var Put={
 	
 	ladder: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/ladder.png"]
+			images: ["assets/images/ladder.png"]
 			,frames: {width:30, height:60}
 		});
 		var obj = {
@@ -545,7 +545,7 @@ var Put={
 		}
 
 		var	spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/lava.png"],
+			images: ["assets/images/lava.png"],
 			frames: {width:5, height:100}
 		});
 
@@ -555,7 +555,7 @@ var Put={
 			,
 			sparks:[],
 			sparkSheet:new createjs.SpriteSheet({
-				images: ["/assets/images/particle.png"],
+				images: ["assets/images/particle.png"],
 				frames: {width:50, height:50}
 			}),
 			update:function(delta) {
@@ -613,7 +613,7 @@ var Put={
 		}
 	
 		var	spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/particle.png"],
+			images: ["assets/images/particle.png"],
 			frames: {width:50, height:50}
 		});
 
@@ -634,7 +634,7 @@ var Put={
 	
 	portal:function(x,y,n)  {
 		var	spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/portal.png"],
+			images: ["assets/images/portal.png"],
 			frames: {width:120, height:186}
 		});
 
@@ -696,7 +696,7 @@ var Put={
 
 	spring: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/spring.png"]
+			images: ["assets/images/spring.png"]
 			,frames: {width:30, height:60}
 		});
 		var obj = {
@@ -736,7 +736,7 @@ var Put={
 
 	temple: function(x,y) {
 		var spriteSheet= new createjs.SpriteSheet({
-			images: ["/assets/images/temple.png"],
+			images: ["assets/images/temple.png"],
 			frames: {width:470, height:280}
 		});
 		
@@ -766,7 +766,7 @@ var Put={
 			unlockSlot:function() {
 			
 				var slotSheet = new createjs.SpriteSheet({
-					images: ["/assets/images/head.png"],
+					images: ["assets/images/head.png"],
 					frames: {width:36, height:33}
 				});	
 				var slot = new createjs.Sprite(slotSheet);
@@ -811,7 +811,7 @@ var Put={
 
 	turbo: function(x,y)  {
 		var spriteSheet = new createjs.SpriteSheet({
-			images: ["/assets/images/turbo.png"]
+			images: ["assets/images/turbo.png"]
 			,frames: {width:30, height:62}
 		});
 		var obj = {
