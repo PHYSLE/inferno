@@ -15,7 +15,7 @@ html,body {
   	/*overflow: hidden; */
 	touch-action: manipulation;
   	width: 100%;	
-	background-color:#333; 
+	background-color:#000; 
 	color:#fff; 
 	font-family: 'Marvel', sans-serif; 
 	margin:0px;
@@ -30,7 +30,12 @@ canvas {
 	position: absolute;
 	top: 0px;
 	background-color:#000; 
-
+	touch-action: none;
+	
+	width: 100%;
+	/*
+	height: 100%;
+	*/
 }
 #loading {
 	width:1000px; 
@@ -140,7 +145,7 @@ div.option input {
 	border:1px rgba(255, 255, 255, 0.5) solid;
 	position:absolute;
 	top:120px;
-	left:400px;
+	left:calc(50% - 80px);
 	text-align:center;
 	font-size:10px;
 	font-family:verdana;
@@ -161,10 +166,11 @@ div.option input {
 
 .control {
 	position: absolute;
-	top: 410px;
+	/*top: 310px;*/
+	bottom: 20px;
 	z-index:9999;
-	height: 54px;
-	width: 54px;
+	height: 60px;
+	width: 60px;
 	border-radius: 52px;
 	margin-top:16px;
 	margin-right:10px;
@@ -173,7 +179,7 @@ div.option input {
 	color:#FFF;
 	text-decoration:none;
 	text-align: center;
-	font-size:38px; /*28px*/
+	font-size:42px; /*28px*/
 	font-family: monospace;
 }
 

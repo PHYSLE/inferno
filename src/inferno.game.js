@@ -192,8 +192,11 @@ var Game = {
 		}
 		
 		
-		$('#canvas').width = Game.width;
-		$('#canvas').height = Game.height;
+;		$('#canvas').width =  Game.width;
+		//$('#canvas').height = Game.height;
+
+		//$('#canvas').width = Math.min(window.screen.width, Game.width);
+		$('#canvas').height = Math.min(window.screen.height, Game.height);
 
 
 		createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
