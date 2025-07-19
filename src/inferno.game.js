@@ -790,7 +790,8 @@ window.addEventListener('load', function() {
 	var cleft = $('#control-left'), 
 		cright = $('#control-right'), 
 		cdown = $('#control-down'),
-		cup = $('#control-up')
+		cup = $('#control-up'),
+		cmenu = $('#control-menu')
 	cup.addEventListener('touchstart', function() {
 		Player.jump();
 	});
@@ -818,7 +819,9 @@ window.addEventListener('load', function() {
 	cdown.addEventListener('touchend', function() {
 		Game.MOVING_DOWN = false;
 	});
-
+	cmenu.addEventListener('click', function() {
+		Game.pause();
+	});
 
 	//options	
 	$('#opt-sound').checked = Game.settings.sound;
